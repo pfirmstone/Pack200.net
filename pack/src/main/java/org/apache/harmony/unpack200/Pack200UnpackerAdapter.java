@@ -22,7 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarOutputStream;
-import io.pack200.Pack200.Unpacker;
+import net.pack200.Pack200.Unpacker;
 
 import org.apache.harmony.pack200.Pack200Adapter;
 import org.apache.harmony.pack200.Pack200Exception;

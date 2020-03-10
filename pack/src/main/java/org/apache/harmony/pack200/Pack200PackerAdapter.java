@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import io.pack200.Pack200.Packer;
+import net.pack200.Pack200.Packer;
 
 
 /**

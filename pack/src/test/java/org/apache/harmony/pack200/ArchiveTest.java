@@ -31,7 +31,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
-import io.pack200.Pack200;
+import net.pack200.Pack200;
 
 
 import org.apache.harmony.pack200.Pack200Archive;
