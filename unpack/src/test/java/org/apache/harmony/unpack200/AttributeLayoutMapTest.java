@@ -18,7 +18,7 @@ package org.apache.harmony.unpack200;
 
 import junit.framework.TestCase;
 
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.unpack200.AttributeLayout;
 import org.apache.harmony.unpack200.AttributeLayoutMap;
 

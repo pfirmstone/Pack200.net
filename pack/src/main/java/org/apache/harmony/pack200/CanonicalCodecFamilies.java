@@ -16,6 +16,9 @@
  */
 package org.apache.harmony.pack200;
 
+import org.apache.harmony.unpack200.codec.BHSDCodec;
+import org.apache.harmony.unpack200.codec.CodecEncoding;
+
 /**
  * Sets of codecs that share characteristics. Mainly used for different effort
  * compression heuristics in BandSet.

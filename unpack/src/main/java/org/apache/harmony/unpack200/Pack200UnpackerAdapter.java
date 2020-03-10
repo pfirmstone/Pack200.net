@@ -25,6 +25,7 @@ import java.util.jar.JarOutputStream;
 import net.pack200.Pack200.Unpacker;
 import org.apache.harmony.unpack200.common.Pack200Adapter;
 import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.osgi.service.component.annotations.Component;
 
 
 /**
@@ -33,6 +34,7 @@ import org.apache.harmony.unpack200.common.Pack200Exception;
  * SortedMap, this class must be compiled and run on a Java 1.5 system. However,
  * Java 1.5 is not necessary to use the internal libraries for unpacking.
  */
+@Component(service = Unpacker.class)
 public class Pack200UnpackerAdapter extends Pack200Adapter implements Unpacker {
 	/*
 	 * (non-Javadoc)

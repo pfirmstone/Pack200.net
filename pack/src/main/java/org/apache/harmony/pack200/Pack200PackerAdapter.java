@@ -21,7 +21,9 @@ import java.io.OutputStream;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import net.pack200.Pack200.Packer;
-
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Adapter;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * This class provides the binding between the standard Pack200 interface and the
@@ -29,6 +31,7 @@ import net.pack200.Pack200.Packer;
  * this class must be compiled and run on a Java 1.5 system. However, Java 1.5
  * is not necessary to use the internal libraries for unpacking.
  */
+@Component(service = Packer.class)
 public class Pack200PackerAdapter extends Pack200Adapter implements Packer {
 
     private final PackingOptions options = new PackingOptions();

@@ -27,7 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import org.objectweb.asm.Handle;
-
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
 import org.objectweb.asm.Type;
 
 /**

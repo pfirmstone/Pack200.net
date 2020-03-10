@@ -35,6 +35,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
  * A Pack200 archive consists of one or more Segments.

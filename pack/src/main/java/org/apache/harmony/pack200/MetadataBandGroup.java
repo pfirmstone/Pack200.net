@@ -21,6 +21,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
 
 /**
  * A group of metadata (annotation) bands, such as class_RVA_bands,

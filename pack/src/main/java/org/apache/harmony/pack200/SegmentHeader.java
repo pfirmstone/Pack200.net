@@ -18,6 +18,9 @@ package org.apache.harmony.pack200;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.codec.BHSDCodec;
+import org.apache.harmony.unpack200.codec.Codec;
 
 /**
  * SegmentHeader is the header band of a {@link Segment}. Corresponds to

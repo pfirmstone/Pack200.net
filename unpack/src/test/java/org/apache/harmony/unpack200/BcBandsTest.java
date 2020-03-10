@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.unpack200.AttrDefinitionBands;
 import org.apache.harmony.unpack200.BcBands;
 import org.apache.harmony.unpack200.ClassBands;

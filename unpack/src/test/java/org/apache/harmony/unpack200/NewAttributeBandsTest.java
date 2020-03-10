@@ -19,7 +19,7 @@ package org.apache.harmony.unpack200;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.unpack200.AttributeLayout;
 import org.apache.harmony.unpack200.NewAttributeBands;
 import org.apache.harmony.unpack200.NewAttributeBands.Call;

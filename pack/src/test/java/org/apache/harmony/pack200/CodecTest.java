@@ -22,10 +22,10 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.apache.harmony.pack200.BHSDCodec;
+import org.apache.harmony.unpack200.codec.BHSDCodec;
 import org.apache.harmony.pack200.CanonicalCodecFamilies;
-import org.apache.harmony.pack200.Codec;
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
  * 

@@ -27,7 +27,7 @@ import org.apache.harmony.unpack200.common.Pack200Exception;
  * first codec, and the remaining codes are decoded from the remaining codec.
  * Note that since this codec maintains state, the instances are not reusable.
  */
-class RunCodec extends Codec {
+public class RunCodec extends Codec {
 
     private int k;
     private final Codec aCodec;

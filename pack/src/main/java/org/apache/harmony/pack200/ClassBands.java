@@ -27,7 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
 import org.apache.harmony.pack200.AttributeDefinitionBands.AttributeDefinition;
 import org.apache.harmony.pack200.IcBands.IcTuple;
 import org.objectweb.asm.Label;

@@ -32,8 +32,8 @@
     
     <modules>
         <module>api</module>
-        <module>pack</module>
         <module>unpack</module>
+        <module>pack</module>
     </modules>
     
     <properties>
@@ -44,6 +44,7 @@
         <asm.version>7.3.1</asm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     </properties>
     
     <dependencyManagement>
@@ -53,6 +54,12 @@
                 <artifactId>asm</artifactId>
                 <version>${asm.version}</version>
             </dependency>  
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -126,7 +133,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>${maven-surefire-plugin.version}</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>org.apache.maven.surefire</groupId>
+                    <artifactId>surefire-junit47</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                  </dependency>
+                </dependencies>
             </plugin>
             <!-- for publishing maven site to gh-pages : begin -->
       <plugin>

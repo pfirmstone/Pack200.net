@@ -24,7 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.objectweb.asm.Handle;
-
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
 import org.objectweb.asm.Label;
 
 /**

@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 import org.apache.harmony.pack200.AttributeDefinitionBands;
 import org.apache.harmony.pack200.AttributeDefinitionBands.AttributeDefinition;
 import org.apache.harmony.pack200.CPUTF8;
-import org.apache.harmony.pack200.Codec;
+import org.apache.harmony.unpack200.codec.Codec;
 import org.apache.harmony.pack200.CpBands;
 import org.apache.harmony.pack200.NewAttribute;
 import org.apache.harmony.pack200.NewAttributeBands;
@@ -37,7 +37,7 @@ import org.apache.harmony.pack200.NewAttributeBands.Reference;
 import org.apache.harmony.pack200.NewAttributeBands.Replication;
 import org.apache.harmony.pack200.NewAttributeBands.Union;
 import org.apache.harmony.pack200.NewAttributeBands.UnionCase;
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.pack200.SegmentHeader;
 
 /**

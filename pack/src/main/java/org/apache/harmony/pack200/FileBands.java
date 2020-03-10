@@ -23,7 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
-
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
 import org.apache.harmony.pack200.Pack200Archive.PackingFile;
 import org.apache.harmony.pack200.Pack200Archive.SegmentUnit;
 import org.objectweb.asm.ClassReader;

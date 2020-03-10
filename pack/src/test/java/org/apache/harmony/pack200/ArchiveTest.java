@@ -35,7 +35,7 @@ import net.pack200.Pack200;
 
 
 import org.apache.harmony.pack200.Pack200Archive;
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.pack200.PackingOptions;
 import org.apache.harmony.unpack200.Segment;
 import org.junit.Test;

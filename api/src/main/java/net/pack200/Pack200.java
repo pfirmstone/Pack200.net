@@ -33,9 +33,9 @@ import java.util.jar.JarOutputStream;
  */
 public abstract class Pack200 {
 
-    private static final String SYSTEM_PROPERTY_PACKER = "java.util.jar.Pack200.Packer"; //$NON-NLS-1$
+    private static final String SYSTEM_PROPERTY_PACKER = "net.pack200.Pack200.Packer"; //$NON-NLS-1$
 
-    private static final String SYSTEM_PROPERTY_UNPACKER = "java.util.jar.Pack200.Unpacker"; //$NON-NLS-1$
+    private static final String SYSTEM_PROPERTY_UNPACKER = "net.pack200.Pack200.Unpacker"; //$NON-NLS-1$
 
     /**
      * Prevent this class from being instantiated.
@@ -60,7 +60,7 @@ public abstract class Pack200 {
                     public Pack200.Packer run() {
                         String className = System
                                 .getProperty(SYSTEM_PROPERTY_PACKER,
-                                        "net.pack200.Pack200PackerAdapter"); //$NON-NLS-1$
+                                        "org.apache.harmony.pack200.Pack200PackerAdapter"); //$NON-NLS-1$
                         try {
                             // TODO Not sure if this will cause problems with
                             // loading the packer
@@ -90,7 +90,7 @@ public abstract class Pack200 {
                     public Pack200.Unpacker run() {
                         String className = System
                                 .getProperty(SYSTEM_PROPERTY_UNPACKER,
-                                        "net.unpack200.Pack200UnpackerAdapter");//$NON-NLS-1$
+                                        "org.apache.harmony.unpack200.Pack200UnpackerAdapter");//$NON-NLS-1$
                         try {
                             return (Unpacker) ClassLoader.getSystemClassLoader()
                                     .loadClass(className).getDeclaredConstructor().newInstance();

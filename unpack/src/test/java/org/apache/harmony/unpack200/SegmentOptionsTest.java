@@ -14,29 +14,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.harmony.pack200;
+package org.apache.harmony.unpack200;
 
-import java.io.IOException;
+import junit.framework.TestCase;
+
+import org.apache.harmony.unpack200.common.Pack200Exception;
+import org.apache.harmony.unpack200.SegmentOptions;
 
 /**
- * Represents a problem with a Pack200 coding/decoding issue.
+ * 
  */
-public class Pack200Exception extends IOException {
+public class SegmentOptionsTest extends TestCase {
 
-    private static final long serialVersionUID = 5168177401552611803L;
-
-    /**
-     * Create a new Pack200 exception with the given message
-     *
-     * @param message
-     *            the text message to display
-     */
-    public Pack200Exception(String message) {
-        super(message);
+    public void testUnused() {
+        int[] unused = new int[] {14, 15, 16, 17, 18, 19, 20, 21, 22,
+                23, 24, 25, 26, 27, 28, 29, 30, 31 };
+        for (int i = 0; i < unused.length; i++) {
+            try {
+                new SegmentOptions(1 << unused[i]);
+                fail("Bit "
+                        + unused[i]
+                        + " should be unused, but it's not caught during construction");
+            } catch (Pack200Exception e) {
+                assertTrue(true);
+            }
+        }
     }
-    
-    public Pack200Exception(String message, Exception cause){
-        super(message, cause);
-    }
-
 }

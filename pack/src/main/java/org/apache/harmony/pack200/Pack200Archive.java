@@ -27,6 +27,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.objectweb.asm.ClassReader;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
  * Pack200Archive is the main entry point to pack200 and represents a packed archive.
