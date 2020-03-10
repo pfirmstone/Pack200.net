@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.harmony.pack200.BHSDCodec;
-import org.apache.harmony.pack200.Codec;
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.codec.BHSDCodec;
+import org.apache.harmony.unpack200.codec.Codec;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.unpack200.bytecode.Attribute;
 import org.apache.harmony.unpack200.bytecode.CPAnyMemberRef;
 import org.apache.harmony.unpack200.bytecode.CPBootstrapMethod;

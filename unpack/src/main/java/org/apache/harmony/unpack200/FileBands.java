@@ -19,8 +19,8 @@ package org.apache.harmony.unpack200;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.harmony.pack200.Codec;
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.codec.Codec;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
  * Parses the file band headers (not including the actual bits themselves). At

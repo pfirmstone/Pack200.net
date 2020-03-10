@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarOutputStream;
 import net.pack200.Pack200.Unpacker;
+import org.apache.harmony.unpack200.common.Pack200Adapter;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
-import org.apache.harmony.pack200.Pack200Adapter;
-import org.apache.harmony.pack200.Pack200Exception;
 
 /**
  * This class provides the binding between the standard Pack200 interface and

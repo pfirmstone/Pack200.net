@@ -30,7 +30,7 @@ import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
  * UnPack200Archive is the main entry point to unpack200. An archive is constructed with

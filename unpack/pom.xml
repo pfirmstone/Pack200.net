@@ -34,7 +34,11 @@
     <description>Pack200.net implementation for uncompressing jar files</description>
     
     <dependencies>
-       
+       <dependency>
+            <groupId>net.pack200.api</groupId>
+            <artifactId>Pack200-API</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

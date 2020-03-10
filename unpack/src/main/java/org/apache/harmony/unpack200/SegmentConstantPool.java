@@ -18,7 +18,7 @@ package org.apache.harmony.unpack200;
 
 import java.util.List;
 
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 import org.apache.harmony.unpack200.bytecode.ClassFileEntry;
 import org.apache.harmony.unpack200.bytecode.ConstantPoolEntry;
 

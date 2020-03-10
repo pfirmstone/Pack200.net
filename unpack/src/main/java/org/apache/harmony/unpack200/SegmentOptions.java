@@ -16,7 +16,7 @@
  */
 package org.apache.harmony.unpack200;
 
-import org.apache.harmony.pack200.Pack200Exception;
+import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
  * Stores the combinations of bit flags that can be used in the segment header

@@ -18,6 +18,7 @@ C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\a
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\IincForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\Segment.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\AttributeLayoutMap.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\codec\PopulationCodec.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\ShortForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\NewAttribute.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\IcBands.java
@@ -40,6 +41,7 @@ C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\a
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\ClassFileEntry.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\InnerClassesAttribute.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\LookupSwitchForm.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\codec\CodecEncoding.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\IMethodRefForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPInteger.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\LineNumberTableAttribute.java
@@ -77,6 +79,8 @@ C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\a
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\ByteForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPConstantNumber.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\StackMapTableAttribute.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\codec\BHSDCodec.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\common\Pack200Exception.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\EnclosingMethodAttribute.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\NewAttributeBands.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPDouble.java
@@ -87,10 +91,12 @@ C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\a
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\NewInitMethodRefForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\RuntimeVisibleorInvisibleAnnotationsAttribute.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\ClassBands.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\common\Pack200Adapter.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\LongForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\ThisMethodRefForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\SuperFieldRefForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPConstant.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\codec\RunCodec.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPMethodRef.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\ReferenceForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\SingleByteReferenceForm.java
@@ -99,6 +105,7 @@ C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\a
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPInvokeDynamic.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\forms\TableSwitchForm.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPLoadableValue.java
+C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\codec\Codec.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\LocalVariableTypeTableAttribute.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\Attribute.java
 C:\Users\peter\Documents\NetBeansProjects\tmp\pack200\unpack\src\main\java\org\apache\harmony\unpack200\bytecode\CPClass.java
