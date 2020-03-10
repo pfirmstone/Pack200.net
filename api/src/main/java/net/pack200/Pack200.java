@@ -27,8 +27,6 @@ import java.util.SortedMap;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
-import org.apache.harmony.pack200.Pack200PackerAdapter;
-import org.apache.harmony.unpack200.Pack200UnpackerAdapter;
 
 /**
  * Class factory for {@link Pack200.Packer} and {@link Pack200.Unpacker}.
@@ -62,14 +60,14 @@ public abstract class Pack200 {
                     public Pack200.Packer run() {
                         String className = System
                                 .getProperty(SYSTEM_PROPERTY_PACKER,
-                                        "org.apache.harmony.pack200.Pack200PackerAdapter"); //$NON-NLS-1$
+                                        "net.pack200.Pack200PackerAdapter"); //$NON-NLS-1$
                         try {
                             // TODO Not sure if this will cause problems with
                             // loading the packer
                             return (Packer) ClassLoader.getSystemClassLoader()
                                     .loadClass(className).getDeclaredConstructor().newInstance();
                         } catch (Exception e) {
-                            return new Pack200PackerAdapter();
+                            throw new Error("Packer implementation class not found: " + className, e);
                         }
                     }
                 });
@@ -92,12 +90,12 @@ public abstract class Pack200 {
                     public Pack200.Unpacker run() {
                         String className = System
                                 .getProperty(SYSTEM_PROPERTY_UNPACKER,
-                                        "org.apache.harmony.unpack200.Pack200UnpackerAdapter");//$NON-NLS-1$
+                                        "net.unpack200.Pack200UnpackerAdapter");//$NON-NLS-1$
                         try {
                             return (Unpacker) ClassLoader.getSystemClassLoader()
                                     .loadClass(className).getDeclaredConstructor().newInstance();
                         } catch (Exception e) {
-                            return new Pack200UnpackerAdapter();
+                            throw new Error("Unpacker implementation class not found: " + className, e);
                         }
                     }
                 });

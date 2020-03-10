@@ -1,0 +1,3 @@
+-exportcontents: \
+    net.pack200
+-sources: false

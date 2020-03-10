@@ -19,64 +19,54 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>net.pack200</groupId>
+        <artifactId>Pack200</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>     
+    </parent>
 
-    <groupId>net.pack200</groupId>
-    <artifactId>Pack200</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <groupId>net.pack200.pack</groupId>
+    <artifactId>Pack200-packer</artifactId>
+    <packaging>jar</packaging>
 
-    <name>PACK200</name>
-    <description>Tool and library to compress and uncompress jar files using
-    Pack200.  https://docs.oracle.com/javase/8/docs/technotes/guides/pack200/pack-spec.html
-    </description>
+    <name>Module :: Pack200 Packer</name>
+    <description>Pack200.net implementation for compressing jar files</description>
     
-    <modules>
-        <module>api</module>
-        <module>pack</module>
-        <module>unpack</module>
-    </modules>
-    
-    <properties>
-        <github.repo.basename>pfirmstone</github.repo.basename>
-        <gmaven.version>1.4</gmaven.version>
-        <gmavenProviderSelection>2.0</gmavenProviderSelection>
-        <junit.version>4.8.2</junit.version>
-        <asm.version>7.3.1</asm.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-    
-    <dependencyManagement>
-        <dependencies>  
-            <dependency>
-                <groupId>org.ow2.asm</groupId>
-                <artifactId>asm</artifactId>
-                <version>${asm.version}</version>
-            </dependency>  
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+        </dependency>  
+        <dependency>
+            <groupId>net.pack200.api</groupId>
+            <artifactId>Pack200-API</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.pack200.unpack</groupId>
+            <artifactId>Pack200-Unpacker</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>  
             <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <failOnError>false</failOnError>
-                </configuration>
-            </plugin>
-            <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-jar-plugin</artifactId>
-              <version>2.6</version>
               <configuration>
                   <useDefaultManifestFile>true</useDefaultManifestFile>
+                  <archive>
+                      <manifestEntries>
+                          <Main-Class>org.apache.harmony.pack200.Main</Main-Class>
+                      </manifestEntries>
+                  </archive>
               </configuration>
             </plugin>
             <plugin>
               <groupId>biz.aQute.bnd</groupId>
               <artifactId>bnd-maven-plugin</artifactId>
-              <version>5.0.0</version>
               <executions>
                     <execution>
                         <goals>
@@ -88,7 +78,6 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.3.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -100,7 +89,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -113,10 +101,9 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
-                        <source>11</source>
-                        <target>11</target>
+                        <source>1.6</source>
+                        <target>1.6</target>
                         <optimize>true</optimize>
                         <encoding>UTF-8</encoding>
                         <meminitial>128m</meminitial>
@@ -126,56 +113,34 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
             </plugin>
-            <!-- for publishing maven site to gh-pages : begin -->
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.6</version>
-        <configuration>
-          <!-- we use maven-scm-publish-plugin to deploy the site to gh-pages branch, so skip maven-site-plugin deploy. -->
-          <skipDeploy>true</skipDeploy>
-        </configuration>
-        <executions>
-          <execution>
-            <!-- ensure 'staging' site tree exists before attempt to deploy site. -->
-            <id>stage-for-scm-publish</id>
-            <phase>post-site</phase>
-            <goals>
-              <goal>stage</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-scm-publish-plugin</artifactId>
-        <version>1.1</version>
-        <configuration>
-          <!-- This is important for git, gh-pages. -->
-          <scmBranch>gh-pages</scmBranch>
-        </configuration>
-        <executions>
-          <execution>
-            <id>scm-publish</id>
-            <phase>site-deploy</phase>
-            <goals>
-              <goal>publish-scm</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- for publishing maven site to gh-pages : end -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
+            
     <reporting>
         <plugins>
              <plugin>
               <artifactId>maven-javadoc-plugin</artifactId>
-              <version>2.10.4</version>
               <configuration>
                 <links>
-                  <link>https://docs.oracle.com/javase/8/docs/api/</link>
+                  <link>https://docs.oracle.com/javase/6/docs/api/</link>
                 </links>
                 <detectLinks>true</detectLinks>
                 <breakiterator>true</breakiterator>
@@ -186,7 +151,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.5</version>
                 <configuration>
                     <excludeFilterFile>findbugs-exclude-filter.xml</excludeFilterFile>
                 </configuration>
