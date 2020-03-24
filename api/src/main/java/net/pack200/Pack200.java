@@ -241,7 +241,7 @@ public abstract class Pack200 {
          * @param listener
          *            the listener to listen if PropertyChange events occurs
          */
-        void addPropertyChangeListener(PropertyChangeListener listener);
+        default void addPropertyChangeListener(PropertyChangeListener listener){}
 
         /**
          * remove a listener
@@ -249,7 +249,7 @@ public abstract class Pack200 {
          * @param listener
          *            listener to remove
          */
-        void removePropertyChangeListener(PropertyChangeListener listener);
+        default void removePropertyChangeListener(PropertyChangeListener listener){}
     }
 
     /**
@@ -323,7 +323,7 @@ public abstract class Pack200 {
          *            the listener to listen if {@code PropertyChange} events
          *            occurs.
          */
-        void addPropertyChangeListener(PropertyChangeListener listener);
+        default void addPropertyChangeListener(PropertyChangeListener listener){}
 
         /**
          * remove a listener.
@@ -331,7 +331,7 @@ public abstract class Pack200 {
          * @param listener
          *            listener to remove.
          */
-        void removePropertyChangeListener(PropertyChangeListener listener);
+        default void removePropertyChangeListener(PropertyChangeListener listener){}
     }
 
 }
