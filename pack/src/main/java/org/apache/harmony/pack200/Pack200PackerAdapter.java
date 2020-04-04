@@ -36,9 +36,10 @@ public class Pack200PackerAdapter extends Pack200Adapter implements Packer {
 
     private final PackingOptions options = new PackingOptions();
 
+    @Override
     public void pack(JarFile file, OutputStream out) throws IOException {
         if (file == null || out == null)
-            throw new IllegalArgumentException(
+            throw new NullPointerException(
                     "Must specify both input and output streams");
         completed(0);
         try {
@@ -49,9 +50,10 @@ public class Pack200PackerAdapter extends Pack200Adapter implements Packer {
         completed(1);
     }
 
+    @Override
     public void pack(JarInputStream in, OutputStream out) throws IOException {
         if (in == null || out == null)
-            throw new IllegalArgumentException(
+            throw new NullPointerException(
                     "Must specify both input and output streams");
         completed(0);
         PackingOptions options = new PackingOptions();

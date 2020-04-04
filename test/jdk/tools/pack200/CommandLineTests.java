@@ -134,7 +134,10 @@ public class CommandLineTests {
             cmdsList.add("-esa");
             cmdsList.add("-ea");
             cmdsList.add(Utils.Is64Bit ? "-Xmx1g" : "-Xmx512m");
-            cmdsList.add(Utils.getPackJar());
+            cmdsList.add("-cp");
+            cmdsList.add(Utils.getClassPath());
+            cmdsList.add(Utils.PackMainClass);
+//            cmdsList.add(Utils.getPackJar());
             cmdsList.add("--repack");
             cmdsList.add("--config-file=" + ConfigFile.getAbsolutePath());
             if (jre) {

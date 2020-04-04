@@ -112,8 +112,11 @@ public class MultiRelease {
                 cmdsList.add(Utils.getJavaCmd());
                 cmdsList.add("-ea");
                 cmdsList.add("-esa");
-                cmdsList.add("-jar");
-                cmdsList.add(Utils.getPackJar());
+//                cmdsList.add("-jar");
+//                cmdsList.add(Utils.getPackJar());
+                cmdsList.add("-cp");
+                cmdsList.add(Utils.getClassPath());
+                cmdsList.add(Utils.PackMainClass);
                 cmdsList.add("--pack");
                 cmdsList.add("-v");
                 cmdsList.add("--repack");

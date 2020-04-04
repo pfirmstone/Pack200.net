@@ -48,7 +48,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
-import au.net.zeus.util.jar.Pack200;
+import net.pack200.Pack200;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -78,6 +78,13 @@ class Utils {
     static final String PackHome = System.getProperty("pack.home");
     static final String PackVersion = System.getProperty("pack.version");
     static final String FileSeparator = System.getProperty("file.separator");
+    static final String PathSeparator = System.getProperty("path.separator");
+    static final String ApiJar = System.getProperty("api.jar");
+    static final String PackJar = System.getProperty("pack.jar");
+    static final String UnpackJar = System.getProperty("unpack.jar");
+    static final String AsmJar = System.getProperty("asm.jar");
+    static final String PackMainClass = System.getProperty("pack.main.class");
+    static final String UnpackMainClass = System.getProperty("unpack.main.class");
 
     static final String PACK_FILE_EXT   = ".pack";
     static final String JAVA_FILE_EXT   = ".java";
@@ -406,7 +413,7 @@ class Utils {
         if (disableNative) {
             cmdList.add("-Dau.net.zeus.util.jar.pack.disable.native=true");
         }
-        cmdList.add("au.net.zeus.util.jar.pack.Driver");
+        cmdList.add(PackMainClass);
         cmdList.add("--repack");
         if (extraOpts != null) {
            for (String opt: extraOpts) {
@@ -558,6 +565,14 @@ class Utils {
         sb.append(PackHome).append(FileSeparator);
         sb.append("Pack200-ex-openjdk").append(PackVersion);
         sb.append(".jar");
+        return sb.toString();
+    }
+    
+    static String getClassPath() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ApiJar).append(PathSeparator).append(PackJar);
+        sb.append(PathSeparator).append(UnpackJar).append(PathSeparator);
+        sb.append(AsmJar);
         return sb.toString();
     }
     

@@ -55,8 +55,11 @@ public class RepackTest {
 
         // case 1:
         cmdsList.add(Utils.getJavaCmd());
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.PackMainClass);
         cmdsList.add("--pack");
         cmdsList.add("--repack");
         cmdsList.add(testFile.getName());
@@ -66,8 +69,11 @@ public class RepackTest {
         File dstFile = new File("dst_tools.jar");
         cmdsList.clear();
         cmdsList.add(Utils.getJavaCmd());
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.PackMainClass);
         cmdsList.add("--pack");
         cmdsList.add("--repack");
         cmdsList.add(dstFile.getName());

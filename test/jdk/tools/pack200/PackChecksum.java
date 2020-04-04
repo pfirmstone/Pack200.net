@@ -65,8 +65,11 @@ public class PackChecksum {
 
         cmdsList.clear();
         cmdsList.add(Utils.getJavaCmd());
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.PackMainClass);
         cmdsList.add("--pack");
         // force multiple segments
         cmdsList.add("--segment-limit=100");
@@ -77,8 +80,11 @@ public class PackChecksum {
         File destFile = new File("dst.jar");
         cmdsList.clear();
         cmdsList.add(Utils.getJavaCmd());
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.UnpackMainClass);
         cmdsList.add("--unpack");
         cmdsList.add(testPack.getName());
         cmdsList.add(destFile.getName());
@@ -107,8 +113,11 @@ public class PackChecksum {
         cmdsList.clear();
         // Create .pack file
         cmdsList.add(Utils.getJavaCmd());
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.PackMainClass);
         cmdsList.add("--pack");
         cmdsList.add(testPack.getName());
         cmdsList.add(testFile.getName());
@@ -140,8 +149,11 @@ public class PackChecksum {
         }
         cmdsList.clear();
         cmdsList.add(Utils.getJavaCmd());
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.UnpackMainClass);
         cmdsList.add("--unpack");
         cmdsList.add(testPack.getName());
         cmdsList.add(dstFile.getName());

@@ -38,8 +38,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import au.net.zeus.util.jar.Pack200;
-import au.net.zeus.util.jar.Pack200.Packer;
+import net.pack200.Pack200;
+import net.pack200.Pack200.Packer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,8 +69,11 @@ public class Pack200Props {
         cmdsList.add(Utils.getJavaCmd());
         cmdsList.add("-Xshare:off");
         cmdsList.add("-Xmx1280m");
-        cmdsList.add("-jar");
-        cmdsList.add(Utils.getPackJar());
+//        cmdsList.add("-jar");
+//        cmdsList.add(Utils.getPackJar());
+        cmdsList.add("-cp");
+        cmdsList.add(Utils.getClassPath());
+        cmdsList.add(Utils.PackMainClass);
         cmdsList.add("--pack");
         cmdsList.add("--effort=1");
         cmdsList.add("--verbose");

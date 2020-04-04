@@ -18,6 +18,7 @@ package org.apache.harmony.unpack200.common;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.EventListener;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -35,18 +36,18 @@ public abstract class Pack200Adapter {
 	public SortedMap<String, String> properties() {
 		return properties;
 	}
-
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		support.addPropertyChangeListener(listener);
+       
+	public void addPropertyChangeListener(EventListener listener) {
+		support.addPropertyChangeListener((PropertyChangeListener) listener);
 	}
 
 	protected void firePropertyChange(String propertyName, Object oldValue,
 			Object newValue) {
 		support.firePropertyChange(propertyName, oldValue, newValue);
 	}
-
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		support.removePropertyChangeListener(listener);
+       
+	public void removePropertyChangeListener(EventListener listener) {
+		support.removePropertyChangeListener((PropertyChangeListener) listener);
 	}
 
 	/**

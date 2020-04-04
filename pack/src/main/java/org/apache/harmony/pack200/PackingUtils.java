@@ -184,7 +184,12 @@ class PackingUtils {
     public static List getPackingFileListFromJar(JarFile jarFile,
             boolean keepFileOrder) throws IOException {
         List packingFileList = new ArrayList();
-        Enumeration jarEntries = jarFile.entries();
+        Enumeration jarEntries;
+        try {
+            jarEntries = jarFile.entries();
+        } catch (IllegalStateException e){
+            throw new IOException("Unable to read jar entries", e);
+        }
         JarEntry jarEntry;
         byte[] bytes;
         while (jarEntries.hasMoreElements()) {

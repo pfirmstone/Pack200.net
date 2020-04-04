@@ -6,12 +6,18 @@
     <!-- location of jtreg tests -->
     <property name="jtreg.dir" location="test/jdk" />
     <!-- location of Pack200 jar file -->
-    <property name="pack.home" location="target"/>
-    <property name="version" value="-1.14.0-SNAPSHOT"/>
+    <property name="pack.home" location="."/>
+    <property name="version" value="-0.0.1-SNAPSHOT"/>
     <property name="jtreg.home" location="${env.JT_HOME}" />
     <!-- probably should rename the environment variable, to enable using the correct -->
     <!-- jdk version for the jtreg tests -->
     <property name="jdk.home" location="${env.JAVA_HOME}"/>
+    <property name="api.jar" value="${pack.home}/api/target/Pack200-API${version}.jar"/>
+    <property name="pack.jar" value="${pack.home}/pack/target/Pack200-packer${version}.jar"/>
+    <property name="unpack.jar" value="${pack.home}/unpack/target/Pack200-Unpacker${version}.jar"/>
+    <property name="asm.jar" value="${pack.home}/pack/target/Pack200-packer${version}-1/Pack200-packer${version}/deps/asm-7.3.1.jar"/>
+    <property name="pack.main.class" value="org.apache.harmony.pack200.Main"/>
+    <property name="unpack.main.class" value="org.apache.harmony.unpack200.Main"/>
     <target name="test" depends="" description="Run jtreg tests">
         <taskdef name="jtreg" classname="com.sun.javatest.regtest.Main$$Ant"
                 classpath="${jtreg.home}/jtreg.jar" />
@@ -21,12 +27,18 @@
                 reportdir="${jtreg.dir}/JTreport" workdir="${jtreg.dir}/JTwork"
                 jdk="${jdk.home}">
             <!--<arg value="-Dpolicy.provider=net.jini.security.policy.DynamicPolicyProvider"/>-->
-            <arg value="-cpa:${pack.home}/Pack200-ex-openjdk${version}.jar"/>
+            <arg value="-cpa:${api.jar}${path.separator}${pack.jar}${path.separator}${asm.jar}${path.separator}${unpack.jar}"/>
             <arg value="-timeout:16"/>
             <arg value="-Dpack.home=${pack.home}"/>
             <arg value="-Dpack.version=${version}"/>
             <arg value="-Djtreg.dir=${jtreg.dir}"/>
             <arg value="-Dscratch.dir=${jtreg.dir}/JTwork/scratch"/>
+            <arg value="-Dapi.jar=${api.jar}"/>
+            <arg value="-Dpack.jar=${pack.jar}"/>
+            <arg value="-Dunpack.jar=${unpack.jar}"/>
+            <arg value="-Dasm.jar=${asm.jar}"/>
+            <arg value="-Dpack.main.class=${pack.main.class}"/>
+            <arg value="-Dunpack.main.class=${unpack.main.class}"/>
             <arg value="-ignore:quiet"/>
             <arg value="-xml:verify"/>           
             <!-- This argument only runs the tests that failed on the last test run -->

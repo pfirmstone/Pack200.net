@@ -42,7 +42,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -62,7 +61,7 @@
                   <useDefaultManifestFile>true</useDefaultManifestFile>
                   <archive>
                       <manifestEntries>
-                          <Main-Class>au.net.zeus.util.jar.pack.Driver</Main-Class>
+                          <Main-Class>org.apache.harmony.unpack200.Main</Main-Class>
                       </manifestEntries>
                   </archive>
               </configuration>

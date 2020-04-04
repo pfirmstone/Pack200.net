@@ -16,13 +16,13 @@
  */
 package net.pack200;
 
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.EventListener;
 import java.util.SortedMap;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -241,7 +241,7 @@ public abstract class Pack200 {
          * @param listener
          *            the listener to listen if PropertyChange events occurs
          */
-        default void addPropertyChangeListener(PropertyChangeListener listener){}
+        default void addPropertyChangeListener(EventListener listener){}
 
         /**
          * remove a listener
@@ -249,7 +249,7 @@ public abstract class Pack200 {
          * @param listener
          *            listener to remove
          */
-        default void removePropertyChangeListener(PropertyChangeListener listener){}
+        default void removePropertyChangeListener(EventListener listener){}
     }
 
     /**
@@ -323,7 +323,7 @@ public abstract class Pack200 {
          *            the listener to listen if {@code PropertyChange} events
          *            occurs.
          */
-        default void addPropertyChangeListener(PropertyChangeListener listener){}
+        default void addPropertyChangeListener(EventListener listener){}
 
         /**
          * remove a listener.
@@ -331,7 +331,7 @@ public abstract class Pack200 {
          * @param listener
          *            listener to remove.
          */
-        default void removePropertyChangeListener(PropertyChangeListener listener){}
+        default void removePropertyChangeListener(EventListener listener){}
     }
 
 }
