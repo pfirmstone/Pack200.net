@@ -5,6 +5,7 @@
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/NewAttributeBands.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/forms/ThisFieldRefForm.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPString.java
+/home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPPackage.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPMethodHandle.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPMethodType.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/NewAttribute.java
@@ -19,12 +20,14 @@
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPNameAndType.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/ExceptionTableEntry.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPFieldRef.java
+/home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPDynamic.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/forms/NewInitMethodRefForm.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/SegmentConstantPool.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/forms/TableSwitchForm.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/BcBands.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/forms/ReferenceForm.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/InnerClassesAttribute.java
+/home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPModule.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/bytecode/CPField.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/codec/BHSDCodec.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/main/java/org/apache/harmony/unpack200/FileBands.java

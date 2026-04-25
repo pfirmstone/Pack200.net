@@ -11,10 +11,13 @@
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/CPUTF8Test.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/bytecode/ByteCodeTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/AttributeLayoutTest.java
+/home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/bytecode/CPModuleTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/BandSetTest.java
+/home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/bytecode/CPDynamicTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/ClassBandsTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/bytecode/ClassFileEntryTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/BcBandsTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/SegmentTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/NewAttributeBandsTest.java
+/home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/bytecode/CPPackageTest.java
 /home/runner/work/Pack200.net/Pack200.net/unpack/src/test/java/org/apache/harmony/unpack200/SegmentUtilsTest.java

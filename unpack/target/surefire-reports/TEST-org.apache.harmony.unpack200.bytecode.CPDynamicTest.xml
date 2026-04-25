@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.apache.harmony.unpack200.ArchiveTest" time="0.901" tests="13" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -54,17 +54,14 @@
     <property name="java.class.version" value="61.0"/>
     <property name="maven.test.failure.ignore" value="true"/>
   </properties>
-  <testcase name="testRemovePackFile" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.104"/>
-  <testcase name="testWithAnnotations" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.007"/>
-  <testcase name="testWithPack200" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.032"/>
-  <testcase name="testWithPack200E1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.022"/>
-  <testcase name="testJustResourcesGZip" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.002"/>
-  <testcase name="testDeflateHint" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.157"/>
-  <testcase name="testLoggingOptions" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.304"/>
-  <testcase name="testWithSql" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.112"/>
-  <testcase name="testWithJNDIE1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.081"/>
-  <testcase name="testWithSqlE1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.037"/>
-  <testcase name="testAlternativeConstructor" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.033"/>
-  <testcase name="testWithE0" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.001"/>
-  <testcase name="testWithLargeClass" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.006"/>
+  <testcase name="testNotEqualsDifferentBootstrap" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testNotEqualsDifferentNameAndType" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testTag" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testNotEqualsDifferentType" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testNotEqualToInvokeDynamic" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testEqualsSelf" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testDoWriteEmitsTagThenBsmIndexThenNatIndex" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testEqualsSameContent" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testNotEqualsNull" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
+  <testcase name="testToStringContainsCpDynamic" classname="org.apache.harmony.unpack200.bytecode.CPDynamicTest" time="0"/>
 </testsuite>
