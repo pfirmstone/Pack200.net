@@ -253,9 +253,9 @@ class Segment extends ClassVisitor {
     }
 
     /**
-     * Sealed classes (Java 17) carry a PermittedSubclasses attribute that Pack200
-     * has no native encoding for. Pass the entire class through as-is so the
-     * attribute is not lost.
+     * Sealed classes (finalized in Java 17, preview in Java 15/16) carry a
+     * PermittedSubclasses attribute that Pack200 has no native encoding for.
+     * Pass the entire class through as-is so the attribute is not lost.
      */
     @Override
     public void visitPermittedSubclass(String permittedSubclass) {
@@ -263,9 +263,10 @@ class Segment extends ClassVisitor {
     }
 
     /**
-     * Record classes (Java 16) carry RecordComponent attributes that Pack200
-     * has no native encoding for. Pass the entire class through as-is so the
-     * record component metadata is not lost.
+     * Record classes (finalized in Java 16, preview in Java 14/15) carry
+     * RecordComponent attributes that Pack200 has no native encoding for.
+     * Pass the entire class through as-is so the record component metadata
+     * is not lost.
      */
     @Override
     public org.objectweb.asm.RecordComponentVisitor visitRecordComponent(
