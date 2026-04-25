@@ -24,6 +24,7 @@ org/apache/harmony/unpack200/bytecode/forms/SuperMethodRefForm.class
 org/apache/harmony/unpack200/bytecode/ExceptionsAttribute.class
 org/apache/harmony/unpack200/bytecode/NewAttribute$BCIndex.class
 org/apache/harmony/unpack200/bytecode/CPClass.class
+org/apache/harmony/unpack200/bytecode/CPModule.class
 org/apache/harmony/unpack200/bytecode/StackMapTableAttribute$FloatVariableInfo.class
 org/apache/harmony/unpack200/bytecode/ClassConstantPool$3.class
 org/apache/harmony/unpack200/bytecode/forms/ByteCodeForm.class
@@ -86,6 +87,7 @@ org/apache/harmony/unpack200/bytecode/forms/ByteForm.class
 org/apache/harmony/unpack200/bytecode/AnnotationsAttribute$Annotation.class
 org/apache/harmony/unpack200/bytecode/StackMapTableAttribute$LongVariableInfo.class
 org/apache/harmony/unpack200/AttrDefinitionBands.class
+org/apache/harmony/unpack200/bytecode/CPPackage.class
 org/apache/harmony/unpack200/bytecode/LocalVariableTypeTableAttribute.class
 org/apache/harmony/unpack200/NewAttributeBands.class
 org/apache/harmony/unpack200/bytecode/forms/IntRefForm.class
@@ -155,4 +157,5 @@ org/apache/harmony/unpack200/bytecode/RuntimeVisibleorInvisibleParameterAnnotati
 org/apache/harmony/unpack200/bytecode/forms/LabelForm.class
 org/apache/harmony/unpack200/bytecode/forms/IincForm.class
 org/apache/harmony/unpack200/bytecode/BCIRenumberedAttribute.class
+org/apache/harmony/unpack200/bytecode/CPDynamic.class
 org/apache/harmony/unpack200/MetadataBandGroup.class
