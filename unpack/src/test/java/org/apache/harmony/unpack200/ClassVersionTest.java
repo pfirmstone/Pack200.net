@@ -35,6 +35,10 @@ public class ClassVersionTest extends TestCase {
     private static final int JAVA_11 = 55;
     private static final int JAVA_12 = 56;
     private static final int JAVA_13 = 57;
+    private static final int JAVA_14 = 58;
+    private static final int JAVA_15 = 59;
+    private static final int JAVA_16 = 60;
+    private static final int JAVA_17 = 61;
     
     public void testCorrectVersionOfSegment() throws IOException {
         InputStream in = Segment.class
@@ -45,7 +49,7 @@ public class ClassVersionTest extends TestCase {
         din.readShort(); // MINOR -- don't care
 //        assertTrue("Class file has been compiled with Java 1.5 compatibility"
 //                + " instead of 1.4 or lower", din.readShort() < JAVA_15);
-	assertTrue("Class not compiled with Java 13 compatibility", din.readShort() <= JAVA_13);
+	assertTrue("Class not compiled with Java 17 compatibility", din.readShort() <= JAVA_17);
     }
 
     public void testCorrectVersionOfTest() throws IOException {
@@ -57,7 +61,7 @@ public class ClassVersionTest extends TestCase {
         din.readShort(); // MINOR -- don't care
 //        assertTrue("Class file has been compiled with Java 1.5 compatibility"
 //                + " instead of 1.4 or lower", din.readShort() < JAVA_15);
-	assertTrue("Class not compiled with Java 13 compatibility", din.readShort() <= JAVA_13);
+	assertTrue("Class not compiled with Java 17 compatibility", din.readShort() <= JAVA_17);
         din.close();
     }
 

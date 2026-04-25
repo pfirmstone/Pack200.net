@@ -15,7 +15,7 @@
     <property name="api.jar" value="${pack.home}/api/target/Pack200-API${version}.jar"/>
     <property name="pack.jar" value="${pack.home}/pack/target/Pack200-packer${version}.jar"/>
     <property name="unpack.jar" value="${pack.home}/unpack/target/Pack200-Unpacker${version}.jar"/>
-    <property name="asm.jar" value="${pack.home}/pack/target/Pack200-packer${version}-1/Pack200-packer${version}/deps/asm-7.3.1.jar"/>
+    <property name="asm.jar" value="${pack.home}/pack/target/Pack200-packer${version}-1/Pack200-packer${version}/deps/asm-9.7.jar"/>
     <property name="pack.main.class" value="org.apache.harmony.pack200.Main"/>
     <property name="unpack.main.class" value="org.apache.harmony.unpack200.Main"/>
     <target name="test" depends="" description="Run jtreg tests">
