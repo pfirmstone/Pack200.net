@@ -404,7 +404,8 @@ abstract class BandSet {
                 tokens[i] = favouredIndex.intValue() + 1;
             }
         }
-        favoured.add(favoured.get(favoured.size() - 1)); // repeat last value
+        int k = favoured.size(); // Calculate k BEFORE adding duplicate
+        favoured.add(favoured.get(favoured.size() - 1)); // repeat last value for encoding
         int[] favouredBand = integerListToArray(favoured);
         int[] unfavouredBand = unfavoured.toArray();
 
@@ -416,7 +417,6 @@ abstract class BandSet {
         int l = 0;
         Codec tokenCodec = null;
         byte[] tokensEncoded;
-        int k = favoured.size() - 1;
         if(k < 256) {
             tdefL = 1;
             tokensEncoded = Codec.BYTE1.encode(tokens);
