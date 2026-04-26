@@ -237,6 +237,8 @@ public class Main {
                 options.setLogFile(args[i].substring(11));
             } else if ("-r".equals(args[i]) || "--repack".equals(args[i])) {
                 repack = true;
+            } else if ("--pack".equals(args[i])) {
+                // pack mode is the default; this flag is accepted for compatibility
             } else if (args[i].startsWith("-f")) {
                 value = args[i].substring(2);
                 if (value.length() == 0) {
