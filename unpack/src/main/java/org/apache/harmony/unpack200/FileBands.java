@@ -31,6 +31,9 @@ import org.apache.harmony.unpack200.common.Pack200Exception;
  */
 class FileBands extends BandSet {
 
+    /** Maximum size of a single entry decoded from a Pack200 archive (4 GiB). */
+    static final long MAX_FILE_SIZE = 4L * 1024L * 1024L * 1024L;
+
     private byte[][] fileBits;
 
     private int[] fileModtime;
@@ -90,9 +93,16 @@ class FileBands extends BandSet {
         long totalBytes = 0;
         for (int i = 0; i < numberOfFiles; i++) {
             long rawSize = fileSize[i];
-            if (rawSize < 0 || rawSize > Integer.MAX_VALUE) {
+            if (rawSize < 0 || rawSize > MAX_FILE_SIZE) {
                 throw new Pack200Exception(
-                        "Invalid file size at index " + i + ": " + rawSize);
+                        "File size at index " + i + " exceeds 4 GiB limit: " + rawSize);
+            }
+            if (rawSize > Integer.MAX_VALUE) {
+                // In the range (Integer.MAX_VALUE, 4 GiB]: valid per spec but
+                // beyond what a byte[] can hold. Streaming support is needed.
+                throw new Pack200Exception(
+                        "File size at index " + i + " (" + rawSize
+                        + " bytes) exceeds buffering capacity; streaming not yet implemented");
             }
             totalBytes += rawSize;
             if (totalBytes < 0) {
