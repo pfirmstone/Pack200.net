@@ -60,6 +60,13 @@ class ClassBands extends BandSet {
     private final IntList classFileVersionMinor = new IntList();
     private final IntList classFileVersionMajor = new IntList();
 
+    // Record attribute (Java 16) – flag bit 25 in class_flags
+    private final IntList classRecordCount = new IntList(); // components per record class
+    private final List<CPUTF8> classRecordNameRU = new ArrayList<CPUTF8>();
+    private final List classRecordDescRS = new ArrayList(); // CPSignature – component field descriptor
+    private final List classRecordSigRSN = new ArrayList(); // CPSignature or null – optional generic signature
+    private int tempRecordComponentCount = 0; // component count accumulator for current class
+
     private final int[] class_field_count;
     private final CPNameAndType[][] field_descr;
     private final long[][] field_flags;
@@ -210,7 +217,11 @@ class ClassBands extends BandSet {
             class_interface[index][i] = cpBands.getCPClass(interfaces[i]);
         }
         major_versions[index] = major;
-        class_flags[index] = flags;
+        // ACC_RECORD (0x10000) is an ASM pseudo-flag inferred from the Record
+        // attribute; it does NOT exist in the class file access_flags (u2) and
+        // must not be stored in class_flags where bit 16 is Pack200's Deprecated
+        // attribute indicator.
+        class_flags[index] = flags & ~Opcodes.ACC_RECORD;
         if(!anySyntheticClasses && ((flags & (1 << 12)) != 0) && segment.getCurrentClassReader().hasSyntheticAttributes()) {
             cpBands.addCPUtf8("Synthetic");
             anySyntheticClasses = true;
@@ -771,6 +782,34 @@ class ClassBands extends BandSet {
                 + " bytes from classFileVersionMajor["
                 + classFileVersionMajor.size() + "]");
 
+        encodedBand = encodeBandInt("class_Record_N",
+                classRecordCount.toArray(), Codec.UNSIGNED5);
+        out.write(encodedBand);
+        PackingUtils.log("Wrote " + encodedBand.length
+                + " bytes from class_Record_N["
+                + classRecordCount.size() + "]");
+
+        encodedBand = encodeBandInt("class_Record_name_RU",
+                cpEntryListToArray(classRecordNameRU), Codec.UNSIGNED5);
+        out.write(encodedBand);
+        PackingUtils.log("Wrote " + encodedBand.length
+                + " bytes from class_Record_name_RU["
+                + classRecordNameRU.size() + "]");
+
+        encodedBand = encodeBandInt("class_Record_desc_RS",
+                cpEntryListToArray(classRecordDescRS), Codec.UNSIGNED5);
+        out.write(encodedBand);
+        PackingUtils.log("Wrote " + encodedBand.length
+                + " bytes from class_Record_desc_RS["
+                + classRecordDescRS.size() + "]");
+
+        encodedBand = encodeBandInt("class_Record_sig_RSN",
+                cpEntryOrNullListToArray(classRecordSigRSN), Codec.UNSIGNED5);
+        out.write(encodedBand);
+        PackingUtils.log("Wrote " + encodedBand.length
+                + " bytes from class_Record_sig_RSN["
+                + classRecordSigRSN.size() + "]");
+
         for (Iterator iterator = classAttributeBands.iterator(); iterator
                 .hasNext();) {
             NewAttributeBands bands = (NewAttributeBands) iterator.next();
@@ -1097,6 +1136,10 @@ class ClassBands extends BandSet {
         tempFieldFlags.clear();
         tempMethodDesc.clear();
         tempMethodFlags.clear();
+        if (tempRecordComponentCount > 0) {
+            classRecordCount.add(tempRecordComponentCount);
+            tempRecordComponentCount = 0;
+        }
         index++;
     }
 
@@ -1121,6 +1164,25 @@ class ClassBands extends BandSet {
         classEnclosingMethodClass.add(cpBands.getCPClass(owner));
         classEnclosingMethodDesc.add(name == null ? null : cpBands
                 .getCPNameAndType(name, desc));
+    }
+
+    /**
+     * Record a single record component for the current class (Java 16+).
+     * The first component sets the Record attribute flag bit (25) in class_flags.
+     * Components with an optional generic signature supply it as the third argument;
+     * pass {@code null} when no Signature sub-attribute should be emitted.
+     * If any component carries annotations or other unsupported sub-attributes the
+     * packer will throw a PassException before this method is called, so all
+     * components that reach here are clean.
+     */
+    public void addRecordComponent(String name, String descriptor, String signature) {
+        if (tempRecordComponentCount == 0) {
+            class_flags[index] |= (1 << 25);
+        }
+        classRecordNameRU.add(cpBands.getCPUtf8(name));
+        classRecordDescRS.add(cpBands.getCPSignature(descriptor));
+        classRecordSigRSN.add(signature != null ? cpBands.getCPSignature(signature) : null);
+        tempRecordComponentCount++;
     }
 
     public void addClassAttribute(NewAttribute attribute) {
@@ -1606,6 +1668,14 @@ class ClassBands extends BandSet {
         tempFieldFlags.clear();
         tempMethodDesc.clear();
         tempMethodFlags.clear();
+        if (tempRecordComponentCount > 0) {
+            for (int i = 0; i < tempRecordComponentCount; i++) {
+                classRecordNameRU.remove(classRecordNameRU.size() - 1);
+                classRecordDescRS.remove(classRecordDescRS.size() - 1);
+                classRecordSigRSN.remove(classRecordSigRSN.size() - 1);
+            }
+            tempRecordComponentCount = 0;
+        }
         if(index > 0) {
             index--;
         }

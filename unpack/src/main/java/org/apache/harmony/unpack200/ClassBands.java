@@ -37,6 +37,7 @@ import org.apache.harmony.unpack200.bytecode.LineNumberTableAttribute;
 import org.apache.harmony.unpack200.bytecode.LocalVariableTableAttribute;
 import org.apache.harmony.unpack200.bytecode.LocalVariableTypeTableAttribute;
 import org.apache.harmony.unpack200.bytecode.MethodParametersAttribute;
+import org.apache.harmony.unpack200.bytecode.RecordAttribute;
 import org.apache.harmony.unpack200.bytecode.SignatureAttribute;
 import org.apache.harmony.unpack200.bytecode.SourceFileAttribute;
 import org.apache.harmony.unpack200.bytecode.StackMapTableAttribute;
@@ -653,6 +654,24 @@ class ClassBands extends BandSet {
         int defaultVersionMajor = header.getDefaultClassMajorVersion();
         int defaultVersionMinor = header.getDefaultClassMinorVersion();
 
+        // Parse Record attribute bands (Java 16, flag bit 25)
+        AttributeLayout recordLayout = attrMap.getAttributeLayout(
+                AttributeLayout.ATTRIBUTE_RECORD,
+                AttributeLayout.CONTEXT_CLASS);
+        int recordCount = SegmentUtils.countMatches(classFlags, recordLayout);
+        int[] classRecordN = decodeBandInt("class_Record_N", in,
+                Codec.UNSIGNED5, recordCount);
+        int totalRecordComponents = 0;
+        for (int i = 0; i < classRecordN.length; i++) {
+            totalRecordComponents += classRecordN[i];
+        }
+        int[] classRecordNameRU = decodeBandInt("class_Record_name_RU", in,
+                Codec.UNSIGNED5, totalRecordComponents);
+        int[] classRecordDescRS = decodeBandInt("class_Record_desc_RS", in,
+                Codec.UNSIGNED5, totalRecordComponents);
+        int[] classRecordSigRSN = decodeBandInt("class_Record_sig_RSN", in,
+                Codec.UNSIGNED5, totalRecordComponents);
+
         // Parse non-predefined attribute bands
         int backwardsCallIndex = backwardsCallsUsed;
         int limit = options.hasClassFlagsHi() ? 62 : 31;
@@ -691,6 +710,8 @@ class ClassBands extends BandSet {
         int innerClassIndex = 0;
         int innerClassC2NIndex = 0;
         int versionIndex = 0;
+        int recordIndex = 0;
+        int recordComponentIndex = 0;
         icLocal = new IcTuple[classCount][];
         for (int i = 0; i < classCount; i++) {
             long flag = classFlags[i];
@@ -793,6 +814,21 @@ class ClassBands extends BandSet {
                 // Fill in with defaults
                 classVersionMajor[i] = defaultVersionMajor;
                 classVersionMinor[i] = defaultVersionMinor;
+            }
+            if (recordLayout != null && recordLayout.matches(flag)) {
+                int n = classRecordN[recordIndex];
+                CPUTF8[] recNames = new CPUTF8[n];
+                CPUTF8[] recDescs = new CPUTF8[n];
+                CPUTF8[] recSigs  = new CPUTF8[n];
+                for (int k = 0; k < n; k++) {
+                    recNames[k] = cpBands.cpUTF8Value(classRecordNameRU[recordComponentIndex]);
+                    recDescs[k] = cpBands.cpSignatureValue(classRecordDescRS[recordComponentIndex]);
+                    int sigIdx = classRecordSigRSN[recordComponentIndex];
+                    recSigs[k] = (sigIdx != 0) ? cpBands.cpSignatureValue(sigIdx - 1) : null;
+                    recordComponentIndex++;
+                }
+                classAttributes[i].add(new RecordAttribute(n, recNames, recDescs, recSigs));
+                recordIndex++;
             }
             // Non-predefined attributes
             for (int j = 0; j < otherLayouts.length; j++) {

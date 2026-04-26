@@ -417,4 +417,40 @@ public class ArchiveTest {
         jarFile2.close();
     }
 
+    /**
+     * Round-trip test for Java 16 record classes.
+     * Packs records.jar (containing Point, NamedPoint, GenericPair records),
+     * then unpacks and compares byte-for-byte with the original.
+     */
+    @Test
+    public void testRecords() throws IOException, Pack200Exception, URISyntaxException {
+        in = new JarFile(new File(Pack200Archive.class.getResource(
+                "/org/apache/harmony/pack200/tests/records.jar").toURI()));
+        file = File.createTempFile("records", ".pack");
+        file.deleteOnExit();
+        out = new FileOutputStream(file);
+        PackingOptions options = new PackingOptions();
+        options.setGzip(false);
+        new Pack200Archive(in, out, options).pack();
+        in.close();
+        out.close();
+
+        InputStream in2 = new FileInputStream(file);
+        File file2 = File.createTempFile("recordsout", ".jar");
+        file2.deleteOnExit();
+        JarOutputStream out2 = new JarOutputStream(new FileOutputStream(file2));
+        org.apache.harmony.unpack200.UnPack200Archive archive =
+                new org.apache.harmony.unpack200.UnPack200Archive(in2, out2);
+        archive.unpack();
+        out2.close();
+        in2.close();
+
+        JarFile jarFile  = new JarFile(file2);
+        JarFile jarFile2 = new JarFile(new File(Pack200Archive.class.getResource(
+                "/org/apache/harmony/pack200/tests/recordsUnpacked.jar").toURI()));
+
+        assertEquals("Entry count mismatch after round-trip", jarFile2.size(), jarFile.size());
+        compareFiles(jarFile, jarFile2);
+    }
+
 }

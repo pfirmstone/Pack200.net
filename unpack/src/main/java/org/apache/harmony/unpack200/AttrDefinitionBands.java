@@ -32,6 +32,7 @@ import org.apache.harmony.unpack200.bytecode.LineNumberTableAttribute;
 import org.apache.harmony.unpack200.bytecode.LocalVariableTableAttribute;
 import org.apache.harmony.unpack200.bytecode.LocalVariableTypeTableAttribute;
 import org.apache.harmony.unpack200.bytecode.MethodParametersAttribute;
+import org.apache.harmony.unpack200.bytecode.RecordAttribute;
 import org.apache.harmony.unpack200.bytecode.SignatureAttribute;
 import org.apache.harmony.unpack200.bytecode.SourceFileAttribute;
 
@@ -114,6 +115,8 @@ class AttrDefinitionBands extends BandSet {
         MetadataBandGroup.setRvpaAttributeName(segment.getCpBands().cpUTF8Value("RuntimeVisibleParameterAnnotations"));
         MetadataBandGroup.setRipaAttributeName(segment.getCpBands().cpUTF8Value("RuntimeInvisibleParameterAnnotations"));
 	MethodParametersAttribute.setAttributeName(segment.getCpBands().cpUTF8Value("MethodParameters"));
+	RecordAttribute.setAttributeName(segment.getCpBands().cpUTF8Value("Record")); //$NON-NLS-1$
+	RecordAttribute.setSignatureAttributeName(segment.getCpBands().cpUTF8Value("Signature")); //$NON-NLS-1$
     }
 
     public AttributeLayoutMap getAttributeDefinitionMap() {
