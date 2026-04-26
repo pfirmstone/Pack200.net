@@ -463,7 +463,7 @@ class BcBands extends BandSet {
 	    } else if (opcode == 184) { // invokestatic on an interface (JSR-335, Java 8+)
 		// 3-byte instruction: opcode already accounted for above
 		bcCodes.add(243); // invokestatic_interface
-	    } else { // invokeinterface (185) or invokevirtual (182) on interface
+	    } else { // invokeinterface (185)
 		byteCodeOffset += 2; // invokeinterface is 5 bytes total
 		bcCodes.add(INVOKEINTERFACE);
 	    }
