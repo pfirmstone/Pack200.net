@@ -38,7 +38,7 @@ class SegmentHeader extends BandSet {
 
     private static final int[] magic = { 0xCA, 0xFE, 0xD0, 0x0D };
     private static final int archive_minver = 1; // previously 7
-    private static final int archive_majver = 170; // previously 150
+    private static final int archive_majver = 180; // previously 170
 
     private int archive_options;
 
