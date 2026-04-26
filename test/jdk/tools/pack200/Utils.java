@@ -79,9 +79,9 @@ class Utils {
     static final String PackVersion = System.getProperty("pack.version");
     static final String FileSeparator = System.getProperty("file.separator");
     static final String PathSeparator = System.getProperty("path.separator");
-    static final String ApiJar = System.getProperty("api.jar");
-    static final String PackJar = System.getProperty("pack.jar");
-    static final String UnpackJar = System.getProperty("unpack.jar");
+    static final String ApiJar = System.getProperty("api.jar", PackHome + "/api/target/Pack200-API" + PackVersion + ".jar");
+    static final String PackJar = System.getProperty("pack.jar", PackHome + "/pack/target/Pack200-Packer" + PackVersion + ".jar");
+    static final String UnpackJar = System.getProperty("unpack.jar", PackHome + "/pack/target/Pack200-Unpacker" + PackVersion + ".jar");
     static final String AsmJar = System.getProperty("asm.jar");
     static final String PackMainClass = System.getProperty("pack.main.class");
     static final String UnpackMainClass = System.getProperty("unpack.main.class");

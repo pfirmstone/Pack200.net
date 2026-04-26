@@ -78,7 +78,6 @@ public class AttributeTests {
         cmds.add("-cp");
         cmds.add(Utils.getClassPath());
         cmds.add(Utils.PackMainClass);
-        cmds.add("--pack");
         cmds.add("--repack");
         cmds.add("-v");
         cmds.add(testJar.getAbsolutePath());

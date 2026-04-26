@@ -47,6 +47,7 @@
     <property name="pack.jar"  location="${pack.home}/Pack200-Packer${version}.jar"/>
     <property name="unpack.jar"  location="${unpack.home}/Pack200-Unpacker${version}.jar"/>
     <property name="asm.jar" location="${basedir}/dist/target/Pack200-dist${version}/lib/asm-${asm.version}.jar"/>
+    <property name="pack.main.class" value="org.apache.harmony.pack200.Main"/>
 
     <!-- jtreg output directories -->
     <property name="jtreg.report.dir" location="${basedir}/target/jtreg/report"/>
@@ -85,6 +86,11 @@
             <arg value="-vmoption:-Dpack.home=${pack.home}"/>
             <arg value="-vmoption:-Dunpack.home=${unpack.home}"/>
             <arg value="-vmoption:-Dpack.version=${version}"/>
+            <arg value="-vmoption:-Dpack.main.class=${pack.main.class}"/>
+            <arg value="-vmoption:-Dapi.jar=${api.jar}"/>
+            <arg value="-vmoption:-Dpack.jar=${pack.jar}"/>
+            <arg value="-vmoption:-Dunpack.jar=${unpack.jar}"/>
+            <arg value="-vmoption:-Dasm.jar=${asm.jar}"/>
             <arg value="${test.dir}"/>
         </java>
     </target>
