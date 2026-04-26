@@ -170,24 +170,34 @@ class Segment extends ClassVisitor {
             } catch (PassException e) {
                 // Pass this class through as-is rather than packing it
                 // TODO: probably need to deal with any inner classes
-                classBands.removeCurrentClass();
+                passClassThrough(segmentUnit, classReader, e);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                // Malformed class file with invalid constant pool references;
+                // pass through as-is rather than packing it
                 String name = classReader.getFileName();
-                options.addPassFile(name);
-                cpBands.addCPUtf8(name);
-                boolean found = false;
-                for (Iterator iterator2 = segmentUnit.getFileList().iterator(); iterator2
-                        .hasNext();) {
-                    PackingFile file = (PackingFile) iterator2.next();
-                    if(file.getName().equals(name)) {
-                        found = true;
-                        file.setContents(classReader.b);
-                        break;
-                    }
-                }
-                if(!found) {
-                    throw new Pack200Exception("Error passing file " + name, e);
-                }
+                PackingUtils.log("Warning: Passing class file through uncompressed due to malformed content: " + name);
+                passClassThrough(segmentUnit, classReader, e);
             }
+        }
+    }
+
+    private void passClassThrough(SegmentUnit segmentUnit, Pack200ClassReader classReader, Exception e) throws Pack200Exception {
+        classBands.removeCurrentClass();
+        String name = classReader.getFileName();
+        options.addPassFile(name);
+        cpBands.addCPUtf8(name);
+        boolean found = false;
+        for (Iterator iterator2 = segmentUnit.getFileList().iterator(); iterator2
+                .hasNext();) {
+            PackingFile file = (PackingFile) iterator2.next();
+            if(file.getName().equals(name)) {
+                found = true;
+                file.setContents(classReader.b);
+                break;
+            }
+        }
+        if(!found) {
+            throw new Pack200Exception("Error passing file " + name, e);
         }
     }
     
