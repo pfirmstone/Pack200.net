@@ -42,7 +42,7 @@ import org.apache.harmony.unpack200.common.Pack200Exception;
  */
 class Segment extends ClassVisitor {
 
-    private final static int OPCODE = Opcodes.ASM7;
+    private final static int OPCODE = Opcodes.ASM9;
     private SegmentHeader segmentHeader;
     private CpBands cpBands;
     private AttributeDefinitionBands attributeDefinitionBands;
@@ -250,6 +250,29 @@ class Segment extends ClassVisitor {
     public void visitInnerClass(String name, String outerName,
             String innerName, int flags) {
         icBands.addInnerClass(name, outerName, innerName, flags);
+    }
+
+    /**
+     * Sealed classes (finalized in Java 17, preview in Java 15/16) carry a
+     * PermittedSubclasses attribute that Pack200 has no native encoding for.
+     * Pass the entire class through as-is so the attribute is not lost.
+     */
+    @Override
+    public void visitPermittedSubclass(String permittedSubclass) {
+        passCurrentClass();
+    }
+
+    /**
+     * Record classes (finalized in Java 16, preview in Java 14/15) carry
+     * RecordComponent attributes that Pack200 has no native encoding for.
+     * Pass the entire class through as-is so the record component metadata
+     * is not lost.
+     */
+    @Override
+    public org.objectweb.asm.RecordComponentVisitor visitRecordComponent(
+            String name, String descriptor, String signature) {
+        passCurrentClass();
+        return null;
     }
 
     @Override

@@ -187,8 +187,7 @@ abstract class BandSet {
 		    index++;
 		}
 	    } catch (RuntimeException e){
-		throw new RuntimeException("Problem decoding band: "
-			+ name + " default codec: " + defaultCodec, e);
+		throw new Pack200Exception("Problem decoding band: " + name);
 	    }
         }
         return result;
@@ -616,21 +615,30 @@ abstract class BandSet {
 	return result;
     }
 
-    protected String[] getReferences(int[] ints, String[] reference) {
+    protected String[] getReferences(int[] ints, String[] reference) throws Pack200Exception {
         String[] result = new String[ints.length];
         for (int i = 0; i < result.length; i++) {
-            result[i] = reference[ints[i]];
+            int idx = ints[i];
+            if (idx < 0 || idx >= reference.length) {
+                throw new Pack200Exception(
+                        "Index " + idx + " out of bounds for reference array of length " + reference.length);
+            }
+            result[i] = reference[idx];
         }
         return result;
     }
 
-    protected String[][] getReferences(int[][] ints, String[] reference) {
+    protected String[][] getReferences(int[][] ints, String[] reference) throws Pack200Exception {
         String[][] result = new String[ints.length][];
         for (int i = 0; i < result.length; i++) {
             result[i] = new String[ints[i].length];
             for (int j = 0; j < result[i].length; j++) {
-                result[i][j] = reference[ints[i][j]];
-
+                int idx = ints[i][j];
+                if (idx < 0 || idx >= reference.length) {
+                    throw new Pack200Exception(
+                            "Index " + idx + " out of bounds for reference array of length " + reference.length);
+                }
+                result[i][j] = reference[idx];
             }
         }
         return result;

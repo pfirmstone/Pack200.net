@@ -31,6 +31,12 @@ import org.apache.harmony.unpack200.common.Pack200Exception;
  */
 class FileBands extends BandSet {
 
+    /** Maximum size of a single entry decoded from a Pack200 archive (2 GiB - 1, i.e. Integer.MAX_VALUE). */
+    static final long MAX_FILE_SIZE = Integer.MAX_VALUE;
+
+    /** Maximum cumulative (total) uncompressed size of all entries in an archive (4 GiB). */
+    static final long MAX_TOTAL_SIZE = 4L * 1024L * 1024L * 1024L;
+
     private byte[][] fileBits;
 
     private int[] fileModtime;
@@ -87,8 +93,19 @@ class FileBands extends BandSet {
         // now read in the bytes
         int numberOfFiles = header.getNumberOfFiles();
         fileBits = new byte[numberOfFiles][];
+        long totalBytes = 0;
         for (int i = 0; i < numberOfFiles; i++) {
-            int size = (int) fileSize[i];
+            long rawSize = fileSize[i];
+            if (rawSize < 0 || rawSize > MAX_FILE_SIZE) {
+                throw new Pack200Exception(
+                        "File size at index " + i + " exceeds Integer.MAX_VALUE limit: " + rawSize);
+            }
+            totalBytes += rawSize;
+            if (totalBytes < 0 || totalBytes > MAX_TOTAL_SIZE) {
+                throw new Pack200Exception(
+                        "Total uncompressed size of archive entries exceeds 4 GiB limit");
+            }
+            int size = (int) rawSize;
             // TODO This breaks if file_size > 2^32. Probably an array is
             // not the right choice, and we should just serialize it here?
             fileBits[i] = new byte[size];

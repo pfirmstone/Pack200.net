@@ -77,7 +77,12 @@ public class IcBands extends BandSet {
             if (icOuterClassInts[i] == 0) {
                 icOuterClass[i] = null;
             } else {
-                icOuterClass[i] = cpClass[icOuterClassInts[i] - 1];
+                int idx = icOuterClassInts[i] - 1;
+                if (idx < 0 || idx >= cpClass.length) {
+                    throw new Pack200Exception(
+                            "ic_outer_class index " + icOuterClassInts[i] + " out of range for cpClass length " + cpClass.length);
+                }
+                icOuterClass[i] = cpClass[idx];
             }
         }
         int[] icNameInts = decodeBandInt("ic_name", in, Codec.DELTA5,
@@ -87,7 +92,12 @@ public class IcBands extends BandSet {
             if (icNameInts[i] == 0) {
                 icName[i] = null;
             } else {
-                icName[i] = cpUTF8[icNameInts[i] - 1];
+                int idx = icNameInts[i] - 1;
+                if (idx < 0 || idx >= cpUTF8.length) {
+                    throw new Pack200Exception(
+                            "ic_name index " + icNameInts[i] + " out of range for cpUTF8 length " + cpUTF8.length);
+                }
+                icName[i] = cpUTF8[idx];
             }
         }
 
