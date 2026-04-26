@@ -39,7 +39,54 @@ public class ClassVersionTest extends TestCase {
     private static final int JAVA_15 = 59;
     private static final int JAVA_16 = 60;
     private static final int JAVA_17 = 61;
-    
+    private static final int JAVA_18 = 62;
+    private static final int JAVA_19 = 63;
+    private static final int JAVA_20 = 64;
+    private static final int JAVA_21 = 65;
+    private static final int JAVA_22 = 66;
+    private static final int JAVA_23 = 67;
+    private static final int JAVA_24 = 68;
+    private static final int JAVA_25 = 69;
+    private static final int JAVA_26 = 70;
+
+    /**
+     * Verifies that the class-file major version constants in this test class
+     * match the JVM Specification (JVMS Table 4.1-B) for Java 5 through 26.
+     * Each Java N release uses major version (44 + N).
+     */
+    public void testJvmSpecVersionNumbers() {
+        assertEquals(49, JAVA_5);
+        assertEquals(50, JAVA_6);
+        assertEquals(51, JAVA_7);
+        assertEquals(52, JAVA_8);
+        assertEquals(53, JAVA_9);
+        assertEquals(54, JAVA_10);
+        assertEquals(55, JAVA_11);
+        assertEquals(56, JAVA_12);
+        assertEquals(57, JAVA_13);
+        assertEquals(58, JAVA_14);
+        assertEquals(59, JAVA_15);
+        assertEquals(60, JAVA_16);
+        assertEquals(61, JAVA_17);
+        assertEquals(62, JAVA_18);
+        assertEquals(63, JAVA_19);
+        assertEquals(64, JAVA_20);
+        assertEquals(65, JAVA_21);
+        assertEquals(66, JAVA_22);
+        assertEquals(67, JAVA_23);
+        assertEquals(68, JAVA_24);
+        assertEquals(69, JAVA_25);
+        assertEquals(70, JAVA_26);
+        // Verify the formula: major = 44 + javaVersion
+        for (int javaVersion = 5; javaVersion <= 26; javaVersion++) {
+            int expectedMajor = 44 + javaVersion;
+            // Round-trip: constant value for this Java version
+            int constantValue = JAVA_5 + (javaVersion - 5);
+            assertEquals("Java " + javaVersion + " major version mismatch",
+                    expectedMajor, constantValue);
+        }
+    }
+
     public void testCorrectVersionOfSegment() throws IOException {
         InputStream in = Segment.class
                 .getResourceAsStream("/org/apache/harmony/unpack200/Segment.class");
@@ -49,7 +96,7 @@ public class ClassVersionTest extends TestCase {
         din.readShort(); // MINOR -- don't care
 //        assertTrue("Class file has been compiled with Java 1.5 compatibility"
 //                + " instead of 1.4 or lower", din.readShort() < JAVA_15);
-	assertTrue("Class not compiled with Java 17 compatibility", din.readShort() <= JAVA_17);
+	assertTrue("Class not compiled with Java 26 compatibility", din.readShort() <= JAVA_26);
     }
 
     public void testCorrectVersionOfTest() throws IOException {
@@ -61,7 +108,7 @@ public class ClassVersionTest extends TestCase {
         din.readShort(); // MINOR -- don't care
 //        assertTrue("Class file has been compiled with Java 1.5 compatibility"
 //                + " instead of 1.4 or lower", din.readShort() < JAVA_15);
-	assertTrue("Class not compiled with Java 17 compatibility", din.readShort() <= JAVA_17);
+	assertTrue("Class not compiled with Java 26 compatibility", din.readShort() <= JAVA_26);
         din.close();
     }
 

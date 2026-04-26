@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.apache.harmony.unpack200.ArchiveTest" time="0.901" tests="13" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.apache.harmony.unpack200.ArchiveTest" time="0.885" tests="13" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="java.vm.specification.version" value="17"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/temurin-17-jdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/runner/work/Pack200.net/Pack200.net/unpack/target/surefire/surefirebooter17831216030676363573.jar /home/runner/work/Pack200.net/Pack200.net/unpack/target/surefire 2026-04-25T23-06-07_392-jvmRun1 surefire1888046326117084547tmp surefire_016192110110412688021tmp"/>
+    <property name="sun.java.command" value="/home/runner/work/Pack200.net/Pack200.net/unpack/target/surefire/surefirebooter745186380379448701.jar /home/runner/work/Pack200.net/Pack200.net/unpack/target/surefire 2026-04-26T00-12-56_537-jvmRun1 surefire3007265739398026372tmp surefire_08937860799885758038tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/runner/work/Pack200.net/Pack200.net/unpack/target/test-classes:/home/runner/work/Pack200.net/Pack200.net/unpack/target/classes:/home/runner/work/Pack200.net/Pack200.net/api/target/classes:/home/runner/.m2/repository/au/net/zeus/jgdms/jgdms-platform/3.1.0/jgdms-platform-3.1.0.jar:/home/runner/.m2/repository/au/net/zeus/jgdms/jgdms-collections/3.1.0/jgdms-collections-3.1.0.jar:/home/runner/.m2/repository/biz/aQute/bnd/biz.aQute.bnd.annotation/3.3.0/biz.aQute.bnd.annotation-3.3.0.jar:/home/runner/.m2/repository/org/osgi/org.osgi.core/4.1.0/org.osgi.core-4.1.0.jar:/home/runner/.m2/repository/org/osgi/org.osgi.util.tracker/1.5.1/org.osgi.util.tracker-1.5.1.jar:/home/runner/.m2/repository/junit/junit/4.13.1/junit-4.13.1.jar:/home/runner/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/runner/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.5.1/org.osgi.service.component.annotations-1.5.1.jar:/home/runner/.m2/repository/org/osgi/osgi.annotation/8.1.0/osgi.annotation-8.1.0.jar:/home/runner/.m2/repository/org/osgi/org.osgi.namespace.extender/1.0.1/org.osgi.namespace.extender-1.0.1.jar:/home/runner/.m2/repository/org/osgi/org.osgi.util.function/1.0.0/org.osgi.util.function-1.0.0.jar:/home/runner/.m2/repository/org/osgi/org.osgi.util.promise/1.0.0/org.osgi.util.promise-1.0.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/runner/work/Pack200.net/Pack200.net/unpack/target/surefire/surefirebooter17831216030676363573.jar"/>
+    <property name="surefire.real.class.path" value="/home/runner/work/Pack200.net/Pack200.net/unpack/target/surefire/surefirebooter745186380379448701.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.18+8"/>
     <property name="user.name" value="runner"/>
@@ -54,17 +54,17 @@
     <property name="java.class.version" value="61.0"/>
     <property name="maven.test.failure.ignore" value="true"/>
   </properties>
-  <testcase name="testRemovePackFile" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.104"/>
-  <testcase name="testWithAnnotations" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.007"/>
-  <testcase name="testWithPack200" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.032"/>
-  <testcase name="testWithPack200E1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.022"/>
-  <testcase name="testJustResourcesGZip" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.002"/>
-  <testcase name="testDeflateHint" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.157"/>
-  <testcase name="testLoggingOptions" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.304"/>
-  <testcase name="testWithSql" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.112"/>
-  <testcase name="testWithJNDIE1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.081"/>
-  <testcase name="testWithSqlE1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.037"/>
-  <testcase name="testAlternativeConstructor" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.033"/>
-  <testcase name="testWithE0" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.001"/>
-  <testcase name="testWithLargeClass" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.006"/>
+  <testcase name="testRemovePackFile" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.154"/>
+  <testcase name="testWithAnnotations" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.005"/>
+  <testcase name="testWithPack200" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.03"/>
+  <testcase name="testWithPack200E1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.025"/>
+  <testcase name="testJustResourcesGZip" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.001"/>
+  <testcase name="testDeflateHint" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.142"/>
+  <testcase name="testLoggingOptions" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.238"/>
+  <testcase name="testWithSql" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.091"/>
+  <testcase name="testWithJNDIE1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.105"/>
+  <testcase name="testWithSqlE1" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.052"/>
+  <testcase name="testAlternativeConstructor" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.027"/>
+  <testcase name="testWithE0" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.002"/>
+  <testcase name="testWithLargeClass" classname="org.apache.harmony.unpack200.ArchiveTest" time="0.008"/>
 </testsuite>
