@@ -196,11 +196,23 @@ public class Pack200Archive {
 
         String name = packingFile.getName();
         if (name.endsWith(".class") && !options.isPassFile(name)) {
-            Pack200ClassReader classParser = new Pack200ClassReader(
-                    packingFile.contents);
-            classParser.setFileName(name);
-            javaClasses.add(classParser);
-            packingFile.contents = new byte[0];
+            try {
+                Pack200ClassReader classParser = new Pack200ClassReader(
+                        packingFile.contents);
+                classParser.setFileName(name);
+                javaClasses.add(classParser);
+                packingFile.contents = new byte[0];
+            } catch (IllegalArgumentException e) {
+                PackingUtils.log("Warning: Passing '" + name
+                        + "' through uncompressed because it is not a valid class file: "
+                        + e.getMessage());
+                options.addPassFile(name);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                PackingUtils.log("Warning: Passing '" + name
+                        + "' through uncompressed because it is a truncated or malformed class file: "
+                        + e.getMessage());
+                options.addPassFile(name);
+            }
         }
         files.add(packingFile);
         return true;
