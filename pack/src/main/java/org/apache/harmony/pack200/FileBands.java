@@ -36,6 +36,9 @@ import org.objectweb.asm.ClassReader;
  */
 class FileBands extends BandSet {
 
+    /** Bit in file_options that marks a file as a class to be rebuilt from class bands. */
+    private static final int IS_CLASS_BIT = 1 << 1;
+
     private final CPUTF8[] fileName;
     private int[] file_name;
     private final int[] file_modtime;
@@ -76,7 +79,7 @@ class FileBands extends BandSet {
             PackingFile packingFile = (PackingFile) fileList.get(i);
             String name = packingFile.getName();
             if (name.endsWith(".class") && !options.isPassFile(name)) {
-                file_options[i] |= (1 << 1);
+                file_options[i] |= IS_CLASS_BIT;
                 if (classNames.contains(name.substring(0, name.length() - 6))) {
                     fileName[i] = emptyString;
                 } else {
@@ -118,12 +121,24 @@ class FileBands extends BandSet {
     public void finaliseBands() {
         file_name = new int[fileName.length];
         for (int i = 0; i < file_name.length; i++) {
-            if (fileName[i].equals(cpBands.getCPUtf8(""))) {
-                PackingFile packingFile = (PackingFile) fileList.get(i);
-                String name = packingFile.getName();
-                if (options.isPassFile(name)) {
+            PackingFile packingFile = (PackingFile) fileList.get(i);
+            String name = packingFile.getName();
+            if (options.isPassFile(name)) {
+                // This file was passed through during class processing.  The
+                // file contents were restored by passClassThrough(), but
+                // file_bits and file_size were captured in the constructor
+                // before that restoration; refresh them now so the packed
+                // output contains the real bytes.  Also clear the isClass bit
+                // so the unpacker treats this entry as raw file data rather
+                // than trying to reconstruct it from (empty) class bands.
+                if ((file_options[i] & IS_CLASS_BIT) != 0) {
+                    file_options[i] &= IS_CLASS_BIT ^ 0xFFFFFFFF;
+                    byte[] contents = packingFile.getContents();
+                    file_bits[i] = contents;
+                    file_size[i] = contents.length;
+                }
+                if (fileName[i].equals(cpBands.getCPUtf8(""))) {
                     fileName[i] = cpBands.getCPUtf8(name);
-                    file_options[i] &= (1 << 1) ^ 0xFFFFFFFF;
                 }
             }
             file_name[i] = fileName[i].getIndex();
