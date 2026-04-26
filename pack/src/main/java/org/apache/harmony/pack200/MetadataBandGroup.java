@@ -444,11 +444,11 @@ class MetadataBandGroup extends BandSet {
             caseF_KF.remove(caseF_KF.size() - 1);
         } else if (tag.equals("J")) {
             caseJ_KJ.remove(caseJ_KJ.size() - 1);
-        } else if (tag.equals("C")) {
+        } else if (tag.equals("c")) {
             casec_RS.remove(casec_RS.size() - 1);
         } else if (tag.equals("e")) {
             caseet_RS.remove(caseet_RS.size() - 1);
-            caseec_RU.remove(caseet_RS.size() - 1);
+            caseec_RU.remove(caseec_RU.size() - 1);
         } else if (tag.equals("s")) {
             cases_RU.remove(cases_RU.size() - 1);
         } else if (tag.equals("[")) {
