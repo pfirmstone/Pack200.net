@@ -352,12 +352,12 @@ class SegmentHeader extends BandSet {
                 }
             }
             if (!found) {
-                if (length >= objs.length) {
+                if (length > objs.length - 1) {
                     int[] newObjs = new int[objs.length + 8];
-                    int[] newCounts = new int[counts.length + 8];
                     System.arraycopy(objs, 0, newObjs, 0, length);
-                    System.arraycopy(counts, 0, newCounts, 0, length);
                     objs = newObjs;
+                    int[] newCounts = new int[counts.length + 8];
+                    System.arraycopy(counts, 0, newCounts, 0, length);
                     counts = newCounts;
                 }
                 objs[length] = obj;
