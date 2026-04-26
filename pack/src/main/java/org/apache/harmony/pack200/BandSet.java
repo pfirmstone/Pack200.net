@@ -587,12 +587,12 @@ abstract class BandSet {
     }
 
     /**
-     * Converts a list of Longs to an long[] array
+     * Converts a list of Numbers (Long or Integer) to a long[] array
      */
     protected long[] longListToArray(List longList) {
         long[] array = new long[longList.size()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = ((Long)longList.get(i)).longValue();
+            array[i] = ((Number)longList.get(i)).longValue();
         }
         return array;
     }
