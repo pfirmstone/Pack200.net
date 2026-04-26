@@ -22,7 +22,7 @@
     <parent>
         <groupId>net.pack200</groupId>
         <artifactId>Pack200</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.27.0</version>
         <relativePath>../pom.xml</relativePath>     
     </parent>
 
@@ -33,13 +33,10 @@
     <name>Module :: Pack200 API</name>
     <description>Pack200.net API for compressing and uncompressing jar files</description>
     
-    <dependencies>
+    <!--<dependencies>
         <dependency>
-        <groupId>au.net.zeus.jgdms</groupId>
-        <artifactId>jgdms-platform</artifactId>
-        <version>3.1.0</version>
-    </dependency>
-    </dependencies>
+        </dependency>
+    </dependencies>-->
 
     <build>
         <plugins>  
@@ -118,7 +115,7 @@
                 </links>
                 <detectLinks>true</detectLinks>
                 <breakiterator>true</breakiterator>
-                <top><![CDATA[<h2>JGDMS Project ${project.version} API Documentation</h2>]]></top>
+                <top><![CDATA[<h2>Pack200 Project 1.27.0 API Documentation</h2>]]></top>
                 <footer><![CDATA[<i>Copyright &copy;, multiple authors.</i>]]></footer>
               </configuration>
             </plugin>

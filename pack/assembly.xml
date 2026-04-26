@@ -5,10 +5,10 @@
     </formats>
     <dependencySets>
         <dependencySet>
-            <useProjectArtifact>false</useProjectArtifact>
+            <useProjectArtifact>true</useProjectArtifact>
             <useStrictFiltering>false</useStrictFiltering>
             <includes>
-                <include>asm:*</include>
+                <include>*:*</include>
             </includes>
             <outputDirectory>deps</outputDirectory>
         </dependencySet>
