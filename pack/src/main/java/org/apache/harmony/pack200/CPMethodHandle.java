@@ -16,13 +16,56 @@
 package org.apache.harmony.pack200;
 
 /**
- *
- * @author peter
+ * Constant pool entry for a method handle (CONSTANT_MethodHandle).
+ * Stores the reference kind and the referenced field/method/interface-method.
  */
-public class CPMethodHandle extends CPConstant {
+class CPMethodHandle extends ConstantPoolEntry implements Comparable {
 
-    public int compareTo(Object o) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private final int refkind;
+    private final CPMethodOrField member;
+    /** true when the member lives in cp_Field (refkind 1-4) */
+    private final boolean isField;
+    /** true when the member lives in cp_Imethod (refkind 9) */
+    private final boolean isIMethod;
+
+    CPMethodHandle(int refkind, CPMethodOrField member,
+                   boolean isField, boolean isIMethod) {
+        this.refkind = refkind;
+        this.member = member;
+        this.isField = isField;
+        this.isIMethod = isIMethod;
     }
-    
+
+    public int getRefkind() { return refkind; }
+    public CPMethodOrField getMember() { return member; }
+    public boolean isField() { return isField; }
+    public boolean isIMethod() { return isIMethod; }
+
+    @Override
+    public int compareTo(Object o) {
+        CPMethodHandle that = (CPMethodHandle) o;
+        if (refkind != that.refkind) return refkind - that.refkind;
+        return member.compareTo(that.member);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof CPMethodHandle)) return false;
+        CPMethodHandle that = (CPMethodHandle) obj;
+        return refkind == that.refkind && member.equals(that.member);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + refkind;
+        hash = 31 * hash + (member != null ? member.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "MethodHandle:" + refkind + " " + member;
+    }
 }

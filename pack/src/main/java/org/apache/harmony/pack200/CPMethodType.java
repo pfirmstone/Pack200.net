@@ -18,12 +18,42 @@ package org.apache.harmony.pack200;
 import java.util.List;
 
 /**
- *
- * @author peter
+ * Constant pool entry for a method type (CONSTANT_MethodType).
+ * The cp_MethodType_form band stores an index into cp_Signature.
  */
-class CPMethodType extends CPSignature {
+class CPMethodType extends ConstantPoolEntry implements Comparable {
 
-    public CPMethodType(String signature, CPUTF8 signatureForm, List classes) {
-	super(signature, signatureForm, classes);
+    /** The underlying method-descriptor signature. */
+    private final CPSignature signature;
+
+    CPMethodType(CPSignature signature) {
+        this.signature = signature;
+    }
+
+    /** Index into cp_Signature for this method type. */
+    public int getSignatureIndex() {
+        return signature.getIndex();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return signature.compareTo(((CPMethodType) o).signature);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof CPMethodType)) return false;
+        return signature.equals(((CPMethodType) obj).signature);
+    }
+
+    @Override
+    public int hashCode() {
+        return signature.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "MethodType:" + signature;
     }
 }

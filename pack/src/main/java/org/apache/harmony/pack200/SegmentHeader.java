@@ -97,6 +97,7 @@ class SegmentHeader extends BandSet {
         writeArchiveSpecialCounts(out);
         writeCpCounts(out);
         writeClassCounts(out);
+        writeCpExtraCounts(out);
         if (band_headers.size()> 0) {
             out.write(encodeScalar(band_headers.toArray(), BHSDCodec.BYTE1));
         }
@@ -195,6 +196,22 @@ class SegmentHeader extends BandSet {
         cp_Imethod_count = count;
     }
 
+    public void setCp_MethodHandle_count(int count) {
+        cp_MethodHandle_count = count;
+    }
+
+    public void setCp_MethodType_count(int count) {
+        cp_MethodType_count = count;
+    }
+
+    public void setCp_BootstrapMethod_count(int count) {
+        cp_BootstrapMethod_count = count;
+    }
+
+    public void setCp_InvokeDynamic_count(int count) {
+        cp_InvokeDynamic_count = count;
+    }
+
     public void setAttribute_definition_count(int attribute_definition_count) {
         this.attribute_definition_count = attribute_definition_count;
     }
@@ -271,12 +288,16 @@ class SegmentHeader extends BandSet {
         out.write(encodeScalar(cp_Field_count, Codec.UNSIGNED5));
         out.write(encodeScalar(cp_Method_count, Codec.UNSIGNED5));
         out.write(encodeScalar(cp_Imethod_count, Codec.UNSIGNED5));
-	if ((archive_options & (1 << 3)) != 0 ) {
-	    out.write(encodeScalar(cp_MethodHandle_count, Codec.UNSIGNED5));
+    }
+
+    private void writeCpExtraCounts(OutputStream out) throws IOException,
+            Pack200Exception {
+	if ((archive_options & (1 << 3)) != 0) { // have_cp_extra_counts
+            out.write(encodeScalar(cp_MethodHandle_count, Codec.UNSIGNED5));
             out.write(encodeScalar(cp_MethodType_count, Codec.UNSIGNED5));
             out.write(encodeScalar(cp_BootstrapMethod_count, Codec.UNSIGNED5));
             out.write(encodeScalar(cp_InvokeDynamic_count, Codec.UNSIGNED5));
-	}
+        }
     }
 
     private void writeClassCounts(OutputStream out) throws IOException,
