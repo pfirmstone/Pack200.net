@@ -48,10 +48,11 @@ public class ClassVersionTest extends TestCase {
     private static final int JAVA_24 = 68;
     private static final int JAVA_25 = 69;
     private static final int JAVA_26 = 70;
+    private static final int JAVA_27 = 71;
 
     /**
      * Verifies that the class-file major version constants in this test class
-     * match the JVM Specification (JVMS Table 4.1-B) for Java 5 through 26.
+     * match the JVM Specification (JVMS Table 4.1-B) for Java 5 through 27.
      * Each Java N release uses major version (44 + N).
      */
     public void testJvmSpecVersionNumbers() {
@@ -77,8 +78,9 @@ public class ClassVersionTest extends TestCase {
         assertEquals(68, JAVA_24);
         assertEquals(69, JAVA_25);
         assertEquals(70, JAVA_26);
+        assertEquals(71, JAVA_27);
         // Verify the formula: major = 44 + javaVersion
-        for (int javaVersion = 5; javaVersion <= 26; javaVersion++) {
+        for (int javaVersion = 5; javaVersion <= 27; javaVersion++) {
             int expectedMajor = 44 + javaVersion;
             // Round-trip: constant value for this Java version
             int constantValue = JAVA_5 + (javaVersion - 5);
@@ -96,7 +98,7 @@ public class ClassVersionTest extends TestCase {
         din.readShort(); // MINOR -- don't care
 //        assertTrue("Class file has been compiled with Java 1.5 compatibility"
 //                + " instead of 1.4 or lower", din.readShort() < JAVA_15);
-	assertTrue("Class not compiled with Java 26 compatibility", din.readShort() <= JAVA_26);
+	assertTrue("Class not compiled with Java 27 compatibility", din.readShort() <= JAVA_27);
     }
 
     public void testCorrectVersionOfTest() throws IOException {
@@ -108,7 +110,7 @@ public class ClassVersionTest extends TestCase {
         din.readShort(); // MINOR -- don't care
 //        assertTrue("Class file has been compiled with Java 1.5 compatibility"
 //                + " instead of 1.4 or lower", din.readShort() < JAVA_15);
-	assertTrue("Class not compiled with Java 26 compatibility", din.readShort() <= JAVA_26);
+	assertTrue("Class not compiled with Java 27 compatibility", din.readShort() <= JAVA_27);
         din.close();
     }
 
