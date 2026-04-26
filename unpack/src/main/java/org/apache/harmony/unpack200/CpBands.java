@@ -167,9 +167,6 @@ class CpBands extends BandSet {
         parseCpField(in);
         parseCpMethod(in);
         parseCpIMethod(in);
-	parseCpMethodHandle(in);
-	parseCpMethodType(in);
-	parseCpBootstrapMethod(in);
 	
 	// cp_AnyMember group method handle component.
 	anyMemberFieldOffset = 0;

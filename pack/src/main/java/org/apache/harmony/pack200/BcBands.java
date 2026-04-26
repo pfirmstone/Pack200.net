@@ -69,6 +69,8 @@ class BcBands extends BandSet {
     private List<Integer> bcInitRefInt = Collections.emptyList();
     private final List<CPMethodOrField> bcInitRef = new ArrayList<CPMethodOrField>();
 
+    private final List<CPInvokeDynamic> bcIndyRef = new ArrayList<CPInvokeDynamic>();
+
     private String currentClass;
     private String superClass;
     private String currentNewClass;
@@ -231,13 +233,14 @@ class BcBands extends BandSet {
         PackingUtils.log("Wrote " + encodedBand.length
                 + " bytes from bcInitRef[" + bcInitRef.size() + "]");
 
-        // out.write(encodeBandInt(cpEntryintegerListToArray(bcEscRef),
-        // Codec.UNSIGNED5));
-        // out.write(encodeBandInt(integerListToArray(bcEscRefSize),
-        // Codec.UNSIGNED5));
-        // out.write(encodeBandInt(integerListToArray(bcEscSize),
-        // Codec.UNSIGNED5));
-        // out.write(encodeBandInt(integerListToArray(bcEscByte), Codec.BYTE1));
+        // bc_escref, bc_escrefsize, bc_escsize, bc_escbyte - empty (count=0)
+        // bc_Loadablevalueref - empty (count=0)
+
+        encodedBand = encodeBandInt("bc_indyref", cpEntryListToArray(bcIndyRef),
+                Codec.DELTA5);
+        out.write(encodedBand);
+        PackingUtils.log("Wrote " + encodedBand.length
+                + " bytes from bc_indyref[" + bcIndyRef.size() + "]");
     }
 
     private List<Integer> getIndexInClass(List<CPMethodOrField> cPMethodOrFieldList) {
@@ -591,8 +594,15 @@ class BcBands extends BandSet {
         updateRenumbering();
     }
 
-    void visitInvokeDynamicInsn(String p1, String p2, Handle p3, Object[] p4) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void visitInvokeDynamicInsn(String name, String desc, Handle bsm,
+	    Object[] bsmArgs) {
+	// invokedynamic is 5 bytes: opcode (1) + index (2) + 2 reserved zeros
+	byteCodeOffset += 5;
+	updateRenumbering();
+	bcCodes.add(186); // INVOKEDYNAMIC opcode
+	CPBootstrapMethod bootstrapMethod = cpBands.getCPBootstrapMethod(bsm, bsmArgs);
+	CPInvokeDynamic indy = cpBands.getCPInvokeDynamic(name, desc, bootstrapMethod);
+	bcIndyRef.add(indy);
     }
 
 }
