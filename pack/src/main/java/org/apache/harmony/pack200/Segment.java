@@ -167,15 +167,19 @@ class Segment extends ClassVisitor {
             }
             try {
                 classReader.accept(this, attributes, flags);
-            } catch (PassException e) {
-                // Pass this class through as-is rather than packing it
-                // TODO: probably need to deal with any inner classes
-                passClassThrough(segmentUnit, classReader, e);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                // Malformed class file with invalid constant pool references or
-                // truncated attribute data; pass through as-is rather than packing it
-                PackingUtils.log("Warning: Passing class file through uncompressed due to malformed content: "
-                        + classReader.getFileName());
+            } catch (RuntimeException e) {
+                // Pass this class through as-is rather than packing it.
+                // Log a diagnostic message that distinguishes unrecognised
+                // attributes (PassException) from any other malformed-class
+                // condition (e.g. ArrayIndexOutOfBoundsException thrown by
+                // ASM when an attribute body is structurally invalid).
+                if (e instanceof PassException) {
+                    PackingUtils.log("WARNING: Passing class file uncompressed due to unrecognized attribute: "
+                            + classReader.getFileName());
+                } else {
+                    PackingUtils.log("WARNING: Passing class file uncompressed due to unknown class format: "
+                            + classReader.getFileName());
+                }
                 passClassThrough(segmentUnit, classReader, e);
             }
         }
