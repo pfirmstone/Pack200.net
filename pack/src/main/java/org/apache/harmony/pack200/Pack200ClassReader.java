@@ -39,14 +39,14 @@ class Pack200ClassReader extends ClassReader {
     
     @Override
     public int readUnsignedShort(int index) {
-	// Doing this to check whether last load-constant instruction was ldc (18) or ldc_w (19)
+        // Doing this to check whether last load-constant instruction was ldc (18) or ldc_w (19)
         // TODO:  Assess whether this impacts on performance
         int unsignedShort = super.readUnsignedShort(index);
-        if(b[index - 1] == 19) {
-		lastUnsignedShort = unsignedShort;
-	    } else {
-		lastUnsignedShort = Short.MIN_VALUE;
-	    }
+        if (index > 0 && b[index - 1] == 19) {
+            lastUnsignedShort = unsignedShort;
+        } else {
+            lastUnsignedShort = Short.MIN_VALUE;
+        }
         return unsignedShort;
     }
 
@@ -58,9 +58,9 @@ class Pack200ClassReader extends ClassReader {
 
     @Override
     public String readUTF8(int offset, char[] arg1) {
-	if (offset == 0) { // To prevent readUnsignedShort throwing ArrayIndexOutOfBoundsException.
-	    return null;
-	}
+        if (offset == 0) { // CP index 0 is always null (JVM spec §4.1); avoids a useless super call.
+            return null;
+        }
         String utf8 = super.readUTF8(offset, arg1);
         if(!anySyntheticAttributes && "Synthetic".equals(utf8)) {
             anySyntheticAttributes = true;
