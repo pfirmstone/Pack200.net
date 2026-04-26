@@ -70,6 +70,7 @@ class BcBands extends BandSet {
     private final List<CPMethodOrField> bcInitRef = new ArrayList<CPMethodOrField>();
 
     private final List<CPInvokeDynamic> bcIndyRef = new ArrayList<CPInvokeDynamic>();
+    private final List bcLoadableValueRef = new ArrayList();
 
     private String currentClass;
     private String superClass;
@@ -234,7 +235,15 @@ class BcBands extends BandSet {
                 + " bytes from bcInitRef[" + bcInitRef.size() + "]");
 
         // bc_escref, bc_escrefsize, bc_escsize, bc_escbyte - empty (count=0)
-        // bc_Loadablevalueref - empty (count=0)
+
+        int[] lvRefs = new int[bcLoadableValueRef.size()];
+        for (int i = 0; i < lvRefs.length; i++) {
+            lvRefs[i] = cpBands.getLVIndex((ConstantPoolEntry) bcLoadableValueRef.get(i));
+        }
+        encodedBand = encodeBandInt("bc_Loadablevalueref", lvRefs, Codec.DELTA5);
+        out.write(encodedBand);
+        PackingUtils.log("Wrote " + encodedBand.length
+                + " bytes from bc_Loadablevalueref[" + lvRefs.length + "]");
 
         encodedBand = encodeBandInt("bc_indyref", cpEntryListToArray(bcIndyRef),
                 Codec.DELTA5);
@@ -393,7 +402,7 @@ class BcBands extends BandSet {
     }
 
     public void visitLdcInsn(Object cst) {
-        CPConstant constant = cpBands.getConstant(cst);
+        ConstantPoolEntry constant = cpBands.getConstant(cst);
         if (segment.lastConstantHadWideIndex() || constant instanceof CPLong
                 || constant instanceof CPDouble) {
             byteCodeOffset += 3;
@@ -415,8 +424,14 @@ class BcBands extends BandSet {
             } else if (constant instanceof CPClass) {
                 bcCodes.add(236); // cldc
                 bcClassRef.add(constant);
+            } else if (constant instanceof CPMethodType
+                    || constant instanceof CPMethodHandle) {
+                bcCodes.add(241); // qldc_w
+                bcLoadableValueRef.add(constant);
             } else {
-                throw new RuntimeException("Constant should not be null");
+                throw new RuntimeException("Unsupported constant type in LDC: "
+                        + (constant != null ? constant.getClass().getName()
+                                + " [" + constant + "]" : "null (cst=" + cst + ")"));
             }
         } else {
             byteCodeOffset += 2;
@@ -432,6 +447,10 @@ class BcBands extends BandSet {
             } else if (constant instanceof CPClass) {
                 bcCodes.add(233); // cldc
                 bcClassRef.add(constant);
+            } else if (constant instanceof CPMethodType
+                    || constant instanceof CPMethodHandle) {
+                bcCodes.add(240); // qldc
+                bcLoadableValueRef.add(constant);
             }
         }
         updateRenumbering();

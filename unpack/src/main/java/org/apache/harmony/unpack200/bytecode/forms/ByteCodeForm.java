@@ -346,6 +346,13 @@ public abstract class ByteCodeForm {
         byteCodeArray[239] = new DoubleForm(239, "dldc2_w", new int[] { 20, -1,
                 -1 });
 
+        // Pack200 extension pseudo-opcodes for loadable values (Java 7+):
+        // MethodType and MethodHandle constants in LDC instructions.
+        byteCodeArray[240] = new LoadableValueRefForm(240, "qldc",
+                new int[] { 18, -1 });
+        byteCodeArray[241] = new LoadableValueRefForm(241, "qldc_w",
+                new int[] { 19, -1, -1 }, WIDENED);
+
         // Pack200 extension pseudo-opcodes for JSR-335 (Java 8+) interface method calls.
         // invokespecial and invokestatic can target interface methods; they encode as
         // 3-byte instructions referencing a CONSTANT_InterfaceMethodref (cp_Imethod).

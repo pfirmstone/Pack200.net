@@ -250,6 +250,24 @@ class CpBands extends BandSet {
 	throw new IllegalArgumentException("Unsupported loadable value type: " + arg.getClass());
     }
 
+    /**
+     * Compute the combined cpLoadableValue index for a CP entry.
+     * Must be called after finaliseBands() has assigned per-pool indices.
+     */
+    public int getLVIndex(ConstantPoolEntry entry) {
+	int lVIntOffset = 0;
+	int lVFloatOffset = lVIntOffset + cp_Int.size();
+	int lVLongOffset = lVFloatOffset + cp_Float.size();
+	int lVDoubleOffset = lVLongOffset + cp_Long.size();
+	int lVStringOffset = lVDoubleOffset + cp_Double.size();
+	int lVClassOffset = lVStringOffset + cp_String.size();
+	int lVMethodHandleOffset = lVClassOffset + cp_Class.size();
+	int lVMethodTypeOffset = lVMethodHandleOffset + cp_MethodHandle.size();
+	return computeLVIndex(entry, lVIntOffset, lVFloatOffset, lVLongOffset,
+		lVDoubleOffset, lVStringOffset, lVClassOffset,
+		lVMethodHandleOffset, lVMethodTypeOffset);
+    }
+
     private void writeCpInvokeDynamic(OutputStream out)
 	    throws IOException, Pack200Exception {
 	int count = cp_InvokeDynamic.size();
@@ -787,8 +805,8 @@ class CpBands extends BandSet {
 	return cpF;
     }
 
-    public CPConstant getConstant(Object value) {
-	CPConstant constant = (CPConstant) objectsToCPConstant.get(value);
+    public ConstantPoolEntry getConstant(Object value) {
+	ConstantPoolEntry constant = (ConstantPoolEntry) objectsToCPConstant.get(value);
 	if (constant == null) {
 	    if (value instanceof Integer) {
 		constant = new CPInt(((Integer) value).intValue());
@@ -818,13 +836,13 @@ class CpBands extends BandSet {
 		    className += ";";
 		    constant = getCPClass(className);
 		} else if (sort == Type.METHOD) {
-		    // ...
+		    constant = getCPMethodType(((Type) value).getDescriptor());
 		} else {
 		    // throw an exception
 		    throw new RuntimeException("Unknown constant " + value);
 		}
 	    } else if (value instanceof Handle) {
-		// ...
+		constant = getCPMethodHandle((Handle) value);
 	    } else {
 		// throw an exception
 		throw new RuntimeException("Unknown constant " + value);
