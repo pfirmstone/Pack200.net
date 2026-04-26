@@ -170,10 +170,15 @@ class Segment extends ClassVisitor {
             } catch (PassException e) {
                 // Pass this class through as-is rather than packing it
                 // TODO: probably need to deal with any inner classes
+                PackingUtils.log("Warning: Passing class file through uncompressed due to unrecognized attribute: "
+                        + classReader.getFileName());
                 passClassThrough(segmentUnit, classReader, e);
             } catch (ArrayIndexOutOfBoundsException e) {
                 // Malformed class file with invalid constant pool references or
                 // truncated attribute data; pass through as-is rather than packing it
+                PackingUtils.log(new Pack200ClassReader.ClassFormatException(
+                    "Malformed attribute data in " + classReader.getFileName(), e
+                ).toString());
                 PackingUtils.log("Warning: Passing class file through uncompressed due to malformed content: "
                         + classReader.getFileName());
                 passClassThrough(segmentUnit, classReader, e);
@@ -247,6 +252,10 @@ class Segment extends ClassVisitor {
         if(attribute.isUnknown()) {
             String action = options.getUnknownAttributeAction();
             if(action.equals(PackingOptions.PASS)) {
+                String className = classNameFromFile(currentClassReader.getFileName());
+                PackingUtils.log(new NewAttribute.FormatException(
+                    "class attribute \"" + attribute.type + "\": is unknown attribute in class " + className
+                ).toString());
                 passCurrentClass();
             } else if (action.equals(PackingOptions.ERROR)) {
                 throw new Error("Unknown attribute encountered");
@@ -257,6 +266,10 @@ class Segment extends ClassVisitor {
                 if(newAttribute.isUnknown(AttributeDefinitionBands.CONTEXT_CLASS)) {
                     String action = options.getUnknownClassAttributeAction(newAttribute.type);
                     if(action.equals(PackingOptions.PASS)) {
+                        String className = classNameFromFile(currentClassReader.getFileName());
+                        PackingUtils.log(new NewAttribute.FormatException(
+                            "class attribute \"" + newAttribute.type + "\": is unknown attribute in class " + className
+                        ).toString());
                         passCurrentClass();
                     } else if (action.equals(PackingOptions.ERROR)) {
                         throw new Error("Unknown attribute encountered");
@@ -825,6 +838,19 @@ class Segment extends ClassVisitor {
 
     private void passCurrentClass() {
         throw new PassException();
+    }
+
+    /** Returns the simple class name from a class file name (e.g. "Foo.class" → "Foo"). */
+    private static String classNameFromFile(String fileName) {
+        if (fileName == null) {
+            return "";
+        }
+        int lastSlash = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+        String simple = lastSlash >= 0 ? fileName.substring(lastSlash + 1) : fileName;
+        if (simple.endsWith(".class")) {
+            simple = simple.substring(0, simple.length() - 6);
+        }
+        return simple;
     }
 
     /**

@@ -182,6 +182,17 @@ class NewAttribute extends Attribute {
     }
 
     /**
+     * FormatException indicates that a class attribute has an unrecognized or
+     * unknown format, causing the class file to be passed through uncompressed.
+     */
+    public static class FormatException extends RuntimeException {
+
+        public FormatException(String message) {
+            super(message);
+        }
+    }
+
+    /**
      * PassAttribute extends <code>NewAttribute</code> and manages attributes
      * encountered by ASM that have had an pass action specified to pack200
      * (e.g. via one of the -C, -M, -F or -D command line options such as

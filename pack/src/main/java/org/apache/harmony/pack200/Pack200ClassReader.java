@@ -84,4 +84,16 @@ class Pack200ClassReader extends ClassReader {
         return fileName;
     }
 
+    /**
+     * ClassFormatException indicates that the class file contains malformed or
+     * structurally invalid attribute data, causing the class to be passed
+     * through uncompressed rather than packed.
+     */
+    public static class ClassFormatException extends RuntimeException {
+
+        public ClassFormatException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
 }
