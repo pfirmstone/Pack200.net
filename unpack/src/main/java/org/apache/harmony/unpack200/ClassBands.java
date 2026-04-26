@@ -243,6 +243,9 @@ class ClassBands extends BandSet {
                     long result = field_constantValue_KQ[constantValueIndex];
                     String desc = fieldDescr[i][j];
                     int colon = desc.indexOf(':');
+                    if (colon < 0) {
+                        throw new Pack200Exception("Malformed field descriptor (missing ':'): " + desc);
+                    }
                     String type = desc.substring(colon + 1);
                     if (type.equals("B") || type.equals("S")
                             || type.equals("C") || type.equals("Z"))
@@ -258,6 +261,9 @@ class ClassBands extends BandSet {
                     long result = fieldSignatureRS[signatureIndex];
                     String desc = fieldDescr[i][j];
                     int colon = desc.indexOf(':');
+                    if (colon < 0) {
+                        throw new Pack200Exception("Malformed field descriptor (missing ':'): " + desc);
+                    }
                     String type = desc.substring(colon + 1);
                     CPUTF8 value = (CPUTF8) signatureLayout.getValue(result,
                             type, cpBands.getConstantPool());

@@ -332,6 +332,26 @@ class SegmentHeader {
         return options;
     }
 
+    // Sanity ceilings to prevent OOM from malicious headers.
+    // A Pack200 archive can contain many classes, so these are deliberately
+    // generous, but still far below values that would exhaust heap.
+    static final int MAX_CP_ENTRY_COUNT     = 2_000_000;
+    static final int MAX_CLASS_FILE_COUNT   = 1_000_000;
+    static final int MAX_BAND_HEADERS_SIZE  = 1_048_576; // 1 MiB
+    static final int MAX_ATTR_DEF_COUNT     = 65_536;
+
+    /**
+     * Validates that a decoded count/size value from the archive header falls
+     * within [0, max]. Throws {@link Pack200Exception} if it does not.
+     */
+    private static void checkCount(long value, int max, String fieldName)
+            throws Pack200Exception {
+        if (value < 0 || value > max) {
+            throw new Pack200Exception("Invalid " + fieldName + ": " + value
+                    + " (must be in [0, " + max + "])");
+        }
+    }
+
     private void parseArchiveFileCounts(InputStream in) throws IOException,
             Pack200Exception {
         if (options.hasArchiveFileCounts()) {
@@ -342,16 +362,18 @@ class SegmentHeader {
                     Codec.UNSIGNED5));
             setArchiveModtime(decodeScalar("archive_modtime", in,
                     Codec.UNSIGNED5));
-            numberOfFiles = decodeScalar("file_count", in,
-                    Codec.UNSIGNED5);
+            int fileCount = decodeScalar("file_count", in, Codec.UNSIGNED5);
+            checkCount(fileCount, MAX_CLASS_FILE_COUNT, "file_count");
+            numberOfFiles = fileCount;
         }
     }
 
     private void parseArchiveSpecialCounts(InputStream in) throws IOException,
             Pack200Exception {
         if (getOptions().hasSpecialFormats()) {
-            bandHeadersSize = decodeScalar("band_headers_size", in,
-                    Codec.UNSIGNED5);
+            int bhs = decodeScalar("band_headers_size", in, Codec.UNSIGNED5);
+            checkCount(bhs, MAX_BAND_HEADERS_SIZE, "band_headers_size");
+            bandHeadersSize = bhs;
             setAttributeDefinitionCount(decodeScalar("attr_definition_count",
                     in, Codec.UNSIGNED5));
         }
@@ -359,51 +381,85 @@ class SegmentHeader {
 
     private void parseClassCounts(InputStream in) throws IOException,
             Pack200Exception {
-        innerClassCount = decodeScalar("ic_count", in, Codec.UNSIGNED5);
+        int ic = decodeScalar("ic_count", in, Codec.UNSIGNED5);
+        checkCount(ic, MAX_CLASS_FILE_COUNT, "ic_count");
+        innerClassCount = ic;
         defaultClassMinorVersion = decodeScalar("default_class_minver",
                 in, Codec.UNSIGNED5);
         defaultClassMajorVersion = decodeScalar("default_class_majver",
                 in, Codec.UNSIGNED5);
-        classCount = decodeScalar("class_count", in, Codec.UNSIGNED5);
+        int cc = decodeScalar("class_count", in, Codec.UNSIGNED5);
+        checkCount(cc, MAX_CLASS_FILE_COUNT, "class_count");
+        classCount = cc;
     }
 
     private void parseCpCounts(InputStream in) throws IOException,
             Pack200Exception {
-        cpUTF8Count = decodeScalar("cp_Utf8_count", in, Codec.UNSIGNED5);
+        int utf8 = decodeScalar("cp_Utf8_count", in, Codec.UNSIGNED5);
+        checkCount(utf8, MAX_CP_ENTRY_COUNT, "cp_Utf8_count");
+        cpUTF8Count = utf8;
         if (getOptions().hasCPNumberCounts()) {
-            cpIntCount = decodeScalar("cp_Int_count", in, Codec.UNSIGNED5);
-            cpFloatCount = decodeScalar("cp_Float_count", in,
-                    Codec.UNSIGNED5);
-            cpLongCount = decodeScalar("cp_Long_count", in,
-                    Codec.UNSIGNED5);
-            cpDoubleCount = decodeScalar("cp_Double_count", in,
-                    Codec.UNSIGNED5);
+            int ci = decodeScalar("cp_Int_count", in, Codec.UNSIGNED5);
+            checkCount(ci, MAX_CP_ENTRY_COUNT, "cp_Int_count");
+            cpIntCount = ci;
+            int cf = decodeScalar("cp_Float_count", in, Codec.UNSIGNED5);
+            checkCount(cf, MAX_CP_ENTRY_COUNT, "cp_Float_count");
+            cpFloatCount = cf;
+            int cl = decodeScalar("cp_Long_count", in, Codec.UNSIGNED5);
+            checkCount(cl, MAX_CP_ENTRY_COUNT, "cp_Long_count");
+            cpLongCount = cl;
+            int cd = decodeScalar("cp_Double_count", in, Codec.UNSIGNED5);
+            checkCount(cd, MAX_CP_ENTRY_COUNT, "cp_Double_count");
+            cpDoubleCount = cd;
         }
-        cpStringCount = decodeScalar("cp_String_count", in,
-                Codec.UNSIGNED5);
-        cpClassCount = decodeScalar("cp_Class_count", in, Codec.UNSIGNED5);
-        cpSignatureCount = decodeScalar("cp_Signature_count", in,
-                Codec.UNSIGNED5);
-        cpDescriptorCount = decodeScalar("cp_Descr_count", in,
-                Codec.UNSIGNED5);
-        cpFieldCount = decodeScalar("cp_Field_count", in, Codec.UNSIGNED5);
-        cpMethodCount = decodeScalar("cp_Method_count", in,
-                Codec.UNSIGNED5);
-        cpIMethodCount = decodeScalar("cp_Imethod_count", in,
-                Codec.UNSIGNED5);
+        int cs = decodeScalar("cp_String_count", in, Codec.UNSIGNED5);
+        checkCount(cs, MAX_CP_ENTRY_COUNT, "cp_String_count");
+        cpStringCount = cs;
+        int cc = decodeScalar("cp_Class_count", in, Codec.UNSIGNED5);
+        checkCount(cc, MAX_CP_ENTRY_COUNT, "cp_Class_count");
+        cpClassCount = cc;
+        int sig = decodeScalar("cp_Signature_count", in, Codec.UNSIGNED5);
+        checkCount(sig, MAX_CP_ENTRY_COUNT, "cp_Signature_count");
+        cpSignatureCount = sig;
+        int desc = decodeScalar("cp_Descr_count", in, Codec.UNSIGNED5);
+        checkCount(desc, MAX_CP_ENTRY_COUNT, "cp_Descr_count");
+        cpDescriptorCount = desc;
+        int field = decodeScalar("cp_Field_count", in, Codec.UNSIGNED5);
+        checkCount(field, MAX_CP_ENTRY_COUNT, "cp_Field_count");
+        cpFieldCount = field;
+        int meth = decodeScalar("cp_Method_count", in, Codec.UNSIGNED5);
+        checkCount(meth, MAX_CP_ENTRY_COUNT, "cp_Method_count");
+        cpMethodCount = meth;
+        int imeth = decodeScalar("cp_Imethod_count", in, Codec.UNSIGNED5);
+        checkCount(imeth, MAX_CP_ENTRY_COUNT, "cp_Imethod_count");
+        cpIMethodCount = imeth;
     }
     
      private void parseCpExtraCounts(InputStream in) throws IOException, Pack200Exception {
 	if (getOptions().hasCPExtraCounts()){
-	    cpMethodHandleCount = decodeScalar("cp_MethodHandle_count", in, Codec.UNSIGNED5);
-	    cpMethodTypeCount = decodeScalar("cp_MethodType_count", in, Codec.UNSIGNED5);
-	    cpBootstrapMethodCount = decodeScalar("cp_BootstrapMethod_count", in, Codec.UNSIGNED5);
-	    cpInvokeDynamicCount = decodeScalar("cp_InvokeDynamic_count", in, Codec.UNSIGNED5);
+	    int mh = decodeScalar("cp_MethodHandle_count", in, Codec.UNSIGNED5);
+	    checkCount(mh, MAX_CP_ENTRY_COUNT, "cp_MethodHandle_count");
+	    cpMethodHandleCount = mh;
+	    int mt = decodeScalar("cp_MethodType_count", in, Codec.UNSIGNED5);
+	    checkCount(mt, MAX_CP_ENTRY_COUNT, "cp_MethodType_count");
+	    cpMethodTypeCount = mt;
+	    int bsm = decodeScalar("cp_BootstrapMethod_count", in, Codec.UNSIGNED5);
+	    checkCount(bsm, MAX_CP_ENTRY_COUNT, "cp_BootstrapMethod_count");
+	    cpBootstrapMethodCount = bsm;
+	    int id = decodeScalar("cp_InvokeDynamic_count", in, Codec.UNSIGNED5);
+	    checkCount(id, MAX_CP_ENTRY_COUNT, "cp_InvokeDynamic_count");
+	    cpInvokeDynamicCount = id;
 	}
 	if (getOptions().hasCPSupplementary()){
-	    cpModuleCount = decodeScalar("cp_Module_count", in, Codec.UNSIGNED5);
-	    cpPackageCount = decodeScalar("cp_Package_count", in, Codec.UNSIGNED5);
-	    cpDynamicCount = decodeScalar("cp_Dynamic_count", in, Codec.UNSIGNED5);
+	    int mod = decodeScalar("cp_Module_count", in, Codec.UNSIGNED5);
+	    checkCount(mod, MAX_CP_ENTRY_COUNT, "cp_Module_count");
+	    cpModuleCount = mod;
+	    int pkg = decodeScalar("cp_Package_count", in, Codec.UNSIGNED5);
+	    checkCount(pkg, MAX_CP_ENTRY_COUNT, "cp_Package_count");
+	    cpPackageCount = pkg;
+	    int dyn = decodeScalar("cp_Dynamic_count", in, Codec.UNSIGNED5);
+	    checkCount(dyn, MAX_CP_ENTRY_COUNT, "cp_Dynamic_count");
+	    cpDynamicCount = dyn;
 	}
 	// JDK-8161256 unsupported, future work.
 //	if (getOptions().hasCPGeneralData()){
@@ -474,15 +530,17 @@ class SegmentHeader {
         this.archiveSize = archiveSize;
     }
 
-    private void setAttributeDefinitionCount(long valuie) {
-        this.attributeDefinitionCount = (int) valuie;
+    private void setAttributeDefinitionCount(long value) throws Pack200Exception {
+        checkCount(value, MAX_ATTR_DEF_COUNT, "attr_definition_count");
+        this.attributeDefinitionCount = (int) value;
     }
 
     private void setBandHeadersData(byte[] bandHeaders) {
         this.bandHeadersInputStream = new ByteArrayInputStream(bandHeaders);
     }
 
-    public void setSegmentsRemaining(long value) {
+    public void setSegmentsRemaining(long value) throws Pack200Exception {
+        checkCount(value, Integer.MAX_VALUE, "archive_next_count");
         segmentsRemaining = (int) value;
     }
 

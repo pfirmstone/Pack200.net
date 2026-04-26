@@ -87,8 +87,19 @@ class FileBands extends BandSet {
         // now read in the bytes
         int numberOfFiles = header.getNumberOfFiles();
         fileBits = new byte[numberOfFiles][];
+        long totalBytes = 0;
         for (int i = 0; i < numberOfFiles; i++) {
-            int size = (int) fileSize[i];
+            long rawSize = fileSize[i];
+            if (rawSize < 0 || rawSize > Integer.MAX_VALUE) {
+                throw new Pack200Exception(
+                        "Invalid file size at index " + i + ": " + rawSize);
+            }
+            totalBytes += rawSize;
+            if (totalBytes < 0) {
+                // overflow: cumulative size exceeded Long.MAX_VALUE
+                throw new Pack200Exception("Total file size overflow");
+            }
+            int size = (int) rawSize;
             // TODO This breaks if file_size > 2^32. Probably an array is
             // not the right choice, and we should just serialize it here?
             fileBits[i] = new byte[size];

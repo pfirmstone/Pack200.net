@@ -123,6 +123,10 @@ public class PopulationCodec extends Codec {
                 lastBandLength++;
                 result[i] = last = unfavouredCodec.decode(in, last);
             } else {
+                if (index < 1 || index > k + 1) {
+                    throw new Pack200Exception(
+                            "Favoured index " + index + " out of range [1, " + (k + 1) + "]");
+                }
                 result[i] = favoured[index - 1];
             }
         }

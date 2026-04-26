@@ -196,24 +196,28 @@ class CpBands extends BandSet {
 	parseCpDynamic(in);
 
 	// cp_All group
-        intOffset = cpUTF8.length;
-        floatOffset = intOffset + cpInt.length;
-        longOffset = floatOffset + cpFloat.length;
-        doubleOffset = longOffset + cpLong.length;
-        stringOffset = doubleOffset + cpDouble.length;
-        classOffset = stringOffset + cpString.length;
-        signatureOffset = classOffset + cpClass.length;
-        descrOffset = signatureOffset + cpSignature.length;
-        fieldOffset = descrOffset + cpDescriptor.length;
-        methodOffset = fieldOffset + cpFieldClass.length;
-        imethodOffset = methodOffset + cpMethodClass.length;
-	methodHandleOffset = imethodOffset + cpIMethodClass.length;
-	methodTypeOffset = methodHandleOffset + cpMethodHandleRefkindInts.length;
-	bootstrapMethodOffset = methodTypeOffset + cpBootstrapMethodRef.length;
-	invokeDynamicOffset = bootstrapMethodOffset + cpInvokeDynamicSpec.length;
-	moduleOffset = invokeDynamicOffset + cpInvokeDynamicSpec.length;
-	packageOffset = moduleOffset + cpModule.length;
-	dynamicOffset = packageOffset + cpPackage.length;
+        try {
+            intOffset = cpUTF8.length;
+            floatOffset = Math.addExact(intOffset, cpInt.length);
+            longOffset = Math.addExact(floatOffset, cpFloat.length);
+            doubleOffset = Math.addExact(longOffset, cpLong.length);
+            stringOffset = Math.addExact(doubleOffset, cpDouble.length);
+            classOffset = Math.addExact(stringOffset, cpString.length);
+            signatureOffset = Math.addExact(classOffset, cpClass.length);
+            descrOffset = Math.addExact(signatureOffset, cpSignature.length);
+            fieldOffset = Math.addExact(descrOffset, cpDescriptor.length);
+            methodOffset = Math.addExact(fieldOffset, cpFieldClass.length);
+            imethodOffset = Math.addExact(methodOffset, cpMethodClass.length);
+            methodHandleOffset = Math.addExact(imethodOffset, cpIMethodClass.length);
+            methodTypeOffset = Math.addExact(methodHandleOffset, cpMethodHandleRefkindInts.length);
+            bootstrapMethodOffset = Math.addExact(methodTypeOffset, cpBootstrapMethodRef.length);
+            invokeDynamicOffset = Math.addExact(bootstrapMethodOffset, cpInvokeDynamicSpec.length);
+            moduleOffset = Math.addExact(invokeDynamicOffset, cpInvokeDynamicSpec.length);
+            packageOffset = Math.addExact(moduleOffset, cpModule.length);
+            dynamicOffset = Math.addExact(packageOffset, cpPackage.length);
+        } catch (ArithmeticException e) {
+            throw new Pack200Exception("Constant pool offset overflow: total CP size exceeds Integer.MAX_VALUE");
+        }
     }
 
     public void unpack() {

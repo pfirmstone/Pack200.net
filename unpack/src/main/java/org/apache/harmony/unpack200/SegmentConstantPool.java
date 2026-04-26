@@ -74,50 +74,57 @@ public class SegmentConstantPool {
     protected static final String REGEX_MATCH_INIT = "^" + INITSTRING + ".*";
 
     public ClassFileEntry getValue(int cp, long value) throws Pack200Exception {
+        if (value > Integer.MAX_VALUE || value < -1) {
+            throw new Pack200Exception("Invalid constant pool index: " + value);
+        }
         int index = (int) value;
 	if (index == -1) return null;
 	if (index < -1) throw new Pack200Exception("Cannot have a negative range");
-	switch (cp){
-	    case UTF_8:
-		return bands.cpUTF8Value(index);
-	    case CP_INT:
-		return bands.cpIntegerValue(index);
-	    case CP_FLOAT:
-		return bands.cpFloatValue(index);
-	    case CP_LONG:
-		return bands.cpLongValue(index);
-	    case CP_DOUBLE:
-		return bands.cpDoubleValue(index);
-	    case CP_STRING:
-		return bands.cpStringValue(index);
-	    case CP_CLASS:
-		return bands.cpClassValue(index);
-	    case SIGNATURE:
-		return bands.cpSignatureValue(index);
-	    case CP_DESCR:
-		return bands.cpNameAndTypeValue(index);
-	    case CP_METHOD_HANDLE:
-		return bands.cpMethodHandleValue(index);
-	    case CP_METHOD_TYPE:
-		return bands.cpMethodTypeValue(index);
-	    case CP_BOOTSTRAP_METHOD:
-		return bands.cpBootstrapMethodValue(index);
-	    case CP_INVOKE_DYNAMIC:
-		return bands.cpInvokeDynamicValue(index);
-	    case CP_MODULE:
-		return bands.cpModuleValue(index);
-	    case CP_PACKAGE:
-		return bands.cpPackageValue(index);
-	    case CP_DYNAMIC:
-		return bands.cpDynamicValue(index);
-	    case CP_LOADABLE_VALUE:
-		return bands.cpLoadableValue(index);
-	    case CP_ANY_MEMBER:
-		return bands.cpAnyMemberValue(index);
-	    case ALL:
-		return bands.all(index);
-	    default:
-		throw new Error("Tried to get a value I don't know about: " + cp);
+	try {
+	    switch (cp){
+		case UTF_8:
+		    return bands.cpUTF8Value(index);
+		case CP_INT:
+		    return bands.cpIntegerValue(index);
+		case CP_FLOAT:
+		    return bands.cpFloatValue(index);
+		case CP_LONG:
+		    return bands.cpLongValue(index);
+		case CP_DOUBLE:
+		    return bands.cpDoubleValue(index);
+		case CP_STRING:
+		    return bands.cpStringValue(index);
+		case CP_CLASS:
+		    return bands.cpClassValue(index);
+		case SIGNATURE:
+		    return bands.cpSignatureValue(index);
+		case CP_DESCR:
+		    return bands.cpNameAndTypeValue(index);
+		case CP_METHOD_HANDLE:
+		    return bands.cpMethodHandleValue(index);
+		case CP_METHOD_TYPE:
+		    return bands.cpMethodTypeValue(index);
+		case CP_BOOTSTRAP_METHOD:
+		    return bands.cpBootstrapMethodValue(index);
+		case CP_INVOKE_DYNAMIC:
+		    return bands.cpInvokeDynamicValue(index);
+		case CP_MODULE:
+		    return bands.cpModuleValue(index);
+		case CP_PACKAGE:
+		    return bands.cpPackageValue(index);
+		case CP_DYNAMIC:
+		    return bands.cpDynamicValue(index);
+		case CP_LOADABLE_VALUE:
+		    return bands.cpLoadableValue(index);
+		case CP_ANY_MEMBER:
+		    return bands.cpAnyMemberValue(index);
+		case ALL:
+		    return bands.all(index);
+		default:
+		    throw new Error("Tried to get a value I don't know about: " + cp);
+	    }
+	} catch (ArrayIndexOutOfBoundsException e) {
+	    throw new Pack200Exception("Constant pool index " + index + " out of range for cp type " + cp);
 	}
     }
 
@@ -137,6 +144,9 @@ public class SegmentConstantPool {
      */
     public ConstantPoolEntry getClassSpecificPoolEntry(int cp,
             long desiredIndex, String desiredClassName) throws Pack200Exception {
+        if (desiredIndex > Integer.MAX_VALUE || desiredIndex < 0) {
+            throw new Pack200Exception("Invalid constant pool index: " + desiredIndex);
+        }
         int index = (int) desiredIndex;
         int realIndex = -1;
         String array[] = null;
@@ -188,6 +198,9 @@ public class SegmentConstantPool {
      */
     public ConstantPoolEntry getInitMethodPoolEntry(int cp, long value,
             String desiredClassName) throws Pack200Exception {
+        if (value > Integer.MAX_VALUE || value < 0) {
+            throw new Pack200Exception("Invalid constant pool index: " + value);
+        }
         int realIndex = -1;
         String desiredRegex = REGEX_MATCH_INIT;
         if (cp == CP_METHOD) {
@@ -312,41 +325,49 @@ public class SegmentConstantPool {
 
     public ConstantPoolEntry getConstantPoolEntry(int cp, long value)
             throws Pack200Exception {
+        if (value > Integer.MAX_VALUE || value < -1) {
+            throw new Pack200Exception("Invalid constant pool index: " + value);
+        }
         int index = (int) value;
         if (index == -1) {
             return null;
         } else if (index < 0) {
             throw new Pack200Exception("Cannot have a negative range");
-        } else if (cp == UTF_8) {
-            return bands.cpUTF8Value(index);
-        } else if (cp == CP_INT) {
-            return bands.cpIntegerValue(index);
-        } else if (cp == CP_FLOAT) {
-            return bands.cpFloatValue(index);
-        } else if (cp == CP_LONG) {
-            return bands.cpLongValue(index);
-        } else if (cp == CP_DOUBLE) {
-            return bands.cpDoubleValue(index);
-        } else if (cp == CP_STRING) {
-            return bands.cpStringValue(index);
-        } else if (cp == CP_CLASS) {
-            return bands.cpClassValue(index);
-        } else if (cp == SIGNATURE) {
-            throw new Error("I don't know what to do with signatures yet");
-            // return null /* new CPSignature(bands.getCpSignature()[index]) */;
-        } else if (cp == CP_DESCR) {
-            throw new Error("I don't know what to do with descriptors yet");
-            // return null /* new CPDescriptor(bands.getCpDescriptor()[index])
-            // */;
-        } else if (cp == CP_FIELD) {
-            return bands.cpFieldValue(index);
-        } else if (cp == CP_METHOD) {
-            return bands.cpMethodValue(index);
-        } else if (cp == CP_IMETHOD) {
-            return bands.cpIMethodValue(index);
-        } else {
-            // etc
-            throw new Error("Get value incomplete");
+        }
+        try {
+            if (cp == UTF_8) {
+                return bands.cpUTF8Value(index);
+            } else if (cp == CP_INT) {
+                return bands.cpIntegerValue(index);
+            } else if (cp == CP_FLOAT) {
+                return bands.cpFloatValue(index);
+            } else if (cp == CP_LONG) {
+                return bands.cpLongValue(index);
+            } else if (cp == CP_DOUBLE) {
+                return bands.cpDoubleValue(index);
+            } else if (cp == CP_STRING) {
+                return bands.cpStringValue(index);
+            } else if (cp == CP_CLASS) {
+                return bands.cpClassValue(index);
+            } else if (cp == SIGNATURE) {
+                throw new Error("I don't know what to do with signatures yet");
+                // return null /* new CPSignature(bands.getCpSignature()[index]) */;
+            } else if (cp == CP_DESCR) {
+                throw new Error("I don't know what to do with descriptors yet");
+                // return null /* new CPDescriptor(bands.getCpDescriptor()[index])
+                // */;
+            } else if (cp == CP_FIELD) {
+                return bands.cpFieldValue(index);
+            } else if (cp == CP_METHOD) {
+                return bands.cpMethodValue(index);
+            } else if (cp == CP_IMETHOD) {
+                return bands.cpIMethodValue(index);
+            } else {
+                // etc
+                throw new Error("Get value incomplete");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new Pack200Exception("Constant pool index " + index + " out of range for cp type " + cp);
         }
     }
 }
