@@ -34,6 +34,9 @@ class FileBands extends BandSet {
     /** Maximum size of a single entry decoded from a Pack200 archive (4 GiB). */
     static final long MAX_FILE_SIZE = 4L * 1024L * 1024L * 1024L;
 
+    /** Maximum cumulative (total) uncompressed size of all entries in an archive (4 GiB). */
+    static final long MAX_TOTAL_SIZE = 4L * 1024L * 1024L * 1024L;
+
     private byte[][] fileBits;
 
     private int[] fileModtime;
@@ -105,9 +108,9 @@ class FileBands extends BandSet {
                         + " bytes) exceeds buffering capacity; streaming not yet implemented");
             }
             totalBytes += rawSize;
-            if (totalBytes < 0) {
-                // overflow: cumulative size exceeded Long.MAX_VALUE
-                throw new Pack200Exception("Total file size overflow");
+            if (totalBytes < 0 || totalBytes > MAX_TOTAL_SIZE) {
+                throw new Pack200Exception(
+                        "Total uncompressed size of archive entries exceeds 4 GiB limit");
             }
             int size = (int) rawSize;
             // TODO This breaks if file_size > 2^32. Probably an array is
