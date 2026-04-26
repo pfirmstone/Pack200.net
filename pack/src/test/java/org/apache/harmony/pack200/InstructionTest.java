@@ -125,11 +125,14 @@ public class InstructionTest {
                 javapI.contains("next"));
         // Neither method should have method calls (they are empty)
         assertFalse("I.class methods should not contain invokespecial after pack/unpack; javap:\n" + javapI,
-                javapI.contains("invokespecial #") || javapI.contains("invokestatic #"));
+                javapI.contains("invokespecial ") || javapI.contains("invokestatic "));
 
         unpacked.close();
         // Cleanup
-        for (File f : tmpDir.listFiles()) f.delete();
+        File[] tmpFiles = tmpDir.listFiles();
+        if (tmpFiles != null) {
+            for (File f : tmpFiles) f.delete();
+        }
         tmpDir.delete();
     }
 
