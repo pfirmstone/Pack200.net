@@ -35,6 +35,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.TypePath;
 import org.apache.harmony.unpack200.common.Pack200Exception;
 
 /**
@@ -254,6 +255,18 @@ class Segment extends ClassVisitor {
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         return new SegmentAnnotationVisitor(MetadataBandGroup.CONTEXT_CLASS,
                 desc, visible);
+    }
+
+    /**
+     * Class-level type annotations (e.g. on extends/implements clauses, or on
+     * the class type parameter declarations) cannot be encoded in Pack200 bands.
+     * Pass the entire class through uncompressed so no annotation data is lost.
+     */
+    @Override
+    public AnnotationVisitor visitTypeAnnotation(int typeRef,
+            TypePath typePath, String desc, boolean visible) {
+        passCurrentClass();
+        return null;
     }
 
     @Override
@@ -491,6 +504,51 @@ class Segment extends ClassVisitor {
         public void visitTryCatchBlock(Label start, Label end, Label handler,
                 String type) {
             classBands.addHandler(start, end, handler, type);
+        }
+
+	/**
+	 * Method-level type annotations (return type, parameter types, exception
+	 * types) cannot be encoded in Pack200 bands.  Pass the class through.
+	 */
+	@Override
+        public AnnotationVisitor visitTypeAnnotation(int typeRef,
+                TypePath typePath, String desc, boolean visible) {
+            passCurrentClass();
+            return null;
+        }
+
+	/**
+	 * Instruction-level type annotations (casts, instanceof, new) cannot be
+	 * encoded in Pack200 bands.  Pass the class through.
+	 */
+	@Override
+        public AnnotationVisitor visitInsnAnnotation(int typeRef,
+                TypePath typePath, String desc, boolean visible) {
+            passCurrentClass();
+            return null;
+        }
+
+	/**
+	 * Local variable type annotations cannot be encoded in Pack200 bands.
+	 * Pass the class through.
+	 */
+	@Override
+        public AnnotationVisitor visitLocalVariableAnnotation(int typeRef,
+                TypePath typePath, Label[] start, Label[] end, int[] index,
+                String desc, boolean visible) {
+            passCurrentClass();
+            return null;
+        }
+
+	/**
+	 * Exception handler type annotations cannot be encoded in Pack200 bands.
+	 * Pass the class through.
+	 */
+	@Override
+        public AnnotationVisitor visitTryCatchAnnotation(int typeRef,
+                TypePath typePath, String desc, boolean visible) {
+            passCurrentClass();
+            return null;
         }
 
 	@Override
@@ -789,6 +847,17 @@ class Segment extends ClassVisitor {
         public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
             return new SegmentAnnotationVisitor(MetadataBandGroup.CONTEXT_FIELD,
                     desc, visible);
+        }
+
+	/**
+	 * Field type annotations cannot be encoded in Pack200 bands.
+	 * Pass the class through so the annotation is not lost.
+	 */
+	@Override
+        public AnnotationVisitor visitTypeAnnotation(int typeRef,
+                TypePath typePath, String desc, boolean visible) {
+            passCurrentClass();
+            return null;
         }
 
 	@Override
