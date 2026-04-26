@@ -89,14 +89,8 @@ public class AttributeTests {
          */
         Utils.doCompareBitWise(badAttrJar.getAbsoluteFile(), testJar.getAbsoluteFile());
         String[] expectedStrings = {
-            "WARNING: Passing class file uncompressed due to unrecognized" +
-                    " attribute: Foo.class",
-            "INFO: au.net.zeus.util.jar.pack.Attribute$FormatException: " +
-                    "class attribute \"XourceFile\":  is unknown attribute " +
-                    "in class Foo",
-            "INFO: au.net.zeus.util.jar.pack.ClassReader$ClassFormatException: " +
-                    "AnnotationDefault: attribute length cannot be zero, in Test.message()",
-            "WARNING: Passing class file uncompressed due to unknown class format: Test.class"
+            "Warning: Passing class file through uncompressed due to unrecognized attribute: Foo.class",
+            "Warning: Passing class file through uncompressed due to malformed content: Test.class"
         };
         List<String> notfoundList = new ArrayList<String>();
         notfoundList.addAll(Arrays.asList(expectedStrings));

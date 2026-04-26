@@ -170,6 +170,8 @@ class Segment extends ClassVisitor {
             } catch (PassException e) {
                 // Pass this class through as-is rather than packing it
                 // TODO: probably need to deal with any inner classes
+                PackingUtils.log("Warning: Passing class file through uncompressed due to unrecognized attribute: "
+                        + classReader.getFileName());
                 passClassThrough(segmentUnit, classReader, e);
             } catch (ArrayIndexOutOfBoundsException e) {
                 // Malformed class file with invalid constant pool references or
