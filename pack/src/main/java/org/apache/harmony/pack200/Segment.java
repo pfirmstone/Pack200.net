@@ -217,6 +217,19 @@ class Segment extends ClassVisitor {
         }
     }
 
+    /**
+     * module-info.class files (Java 9+) carry Module and related attributes
+     * (ModulePackages, ModuleMainClass, ModuleResolution, ModuleTarget,
+     * ModuleHashes) that Pack200 has no native encoding for. Pass the entire
+     * class through as-is so the module metadata is not lost.
+     */
+    @Override
+    public org.objectweb.asm.ModuleVisitor visitModule(String name, int access,
+            String version) {
+        passCurrentClass();
+        return null;
+    }
+
     @Override
     public void visitOuterClass(String owner, String name, String desc) {
         classBands.addEnclosingMethod(owner, name, desc);
