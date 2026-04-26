@@ -105,6 +105,8 @@ class CpBands extends BandSet {
 	defaultAttributeNames.add("Module");
 	defaultAttributeNames.add("ModulePackages");
 	defaultAttributeNames.add("ModuleMainClass");
+	// Java 16
+	defaultAttributeNames.add("Record");
     }
 
     public void pack(OutputStream out) throws IOException, Pack200Exception {

@@ -346,6 +346,9 @@ class AttributeLayoutMap {
 		new AttributeLayout(
 			AttributeLayout.ATTRIBUTE_RUNTIME_INVISIBLE_TYPE_ANNOTATIONS,
 			AttributeLayout.CONTEXT_CODE, RUNTIME_TYPE_ANNOTATIONS, 28),
+		new AttributeLayout(
+			AttributeLayout.ATTRIBUTE_RECORD,
+			AttributeLayout.CONTEXT_CLASS, "", 25),
 	};
     }
 

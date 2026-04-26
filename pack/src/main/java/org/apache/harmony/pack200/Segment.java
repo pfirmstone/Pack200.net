@@ -299,16 +299,54 @@ class Segment extends ClassVisitor {
     }
 
     /**
-     * Record classes (finalized in Java 16, preview in Java 14/15) carry
-     * RecordComponent attributes that Pack200 has no native encoding for.
-     * Pass the entire class through as-is so the record component metadata
-     * is not lost.
+     * Record classes (finalized in Java 16, preview in Java 14/15).
+     * Encodes name, descriptor, and optional generic signature for each
+     * component as Pack200 bands (bit 25 of class_flags).  Components that
+     * carry annotations or other unsupported sub-attributes are not encodable
+     * with Option A; in that case the visitor passes the whole class through
+     * uncompressed via PassException.
      */
     @Override
     public org.objectweb.asm.RecordComponentVisitor visitRecordComponent(
             String name, String descriptor, String signature) {
-        passCurrentClass();
-        return null;
+        classBands.addRecordComponent(name, descriptor, signature);
+        return new SegmentRecordComponentVisitor();
+    }
+
+    /**
+     * RecordComponentVisitor that passes the current class through uncompressed
+     * if a sub-attribute (annotation, type annotation, or unknown attribute)
+     * is encountered on the component.  For Option A those sub-attributes are
+     * not encoded in bands.
+     */
+    public class SegmentRecordComponentVisitor
+            extends org.objectweb.asm.RecordComponentVisitor {
+
+        public SegmentRecordComponentVisitor() {
+            super(OPCODE);
+        }
+
+        @Override
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+            passCurrentClass();
+            return null;
+        }
+
+        @Override
+        public AnnotationVisitor visitTypeAnnotation(int typeRef,
+                org.objectweb.asm.TypePath typePath, String desc, boolean visible) {
+            passCurrentClass();
+            return null;
+        }
+
+        @Override
+        public void visitAttribute(org.objectweb.asm.Attribute attribute) {
+            passCurrentClass();
+        }
+
+        @Override
+        public void visitEnd() {
+        }
     }
 
     @Override

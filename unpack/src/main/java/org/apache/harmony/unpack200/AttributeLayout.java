@@ -71,6 +71,8 @@ class AttributeLayout implements IMatcher {
     public static final String ATTRIBUTE_MODULE = "Module";
     public static final String ATTRIBUTE_MODULE_PACKAGES = "ModulePackages";
     public static final String ATTRIBUTE_MODULE_MAIN_CLASS = "ModuleMainClass";
+    //Java 16 Attributes
+    public static final String ATTRIBUTE_RECORD = "Record";
     
     public static final int CONTEXT_CLASS = 0;
     public static final int CONTEXT_CODE = 3;
