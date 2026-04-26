@@ -49,8 +49,7 @@ code.
 ### Expected packer output (from `AttributeTests.java`)
 
 ```
-WARNING: Passing class file uncompressed due to unrecognised attribute: Foo.class
-INFO: au.net.zeus.util.jar.pack.Attribute$FormatException: class attribute "XourceFile":  is unknown attribute in class Foo
+WARNING: Passing class file uncompressed due to unrecognized attribute: Foo.class
 ```
 
 ---
@@ -103,7 +102,6 @@ have thrown `ArrayIndexOutOfBoundsException` independently.
 ### Expected packer output (from `AttributeTests.java`)
 
 ```
-INFO: au.net.zeus.util.jar.pack.ClassReader$ClassFormatException: AnnotationDefault: attribute length cannot be zero, in Test.message()
 WARNING: Passing class file uncompressed due to unknown class format: Test.class
 ```
 
@@ -135,24 +133,31 @@ The companion comment on `readUTF8`'s `offset == 0` guard was also corrected: th
 check is semantically correct per JVM spec §4.1 (constant-pool index 0 is always null),
 not a workaround for the `readUnsignedShort` bug.
 
-### 2. `Segment.processClasses` — uncaught `ArrayIndexOutOfBoundsException`
+### 2. `Segment.processClasses` — uncaught `ArrayIndexOutOfBoundsException` and missing log for `PassException`
 
 **File:** `pack/src/main/java/org/apache/harmony/pack200/Segment.java`
 
-The `try/catch` in `processClasses` only caught `PassException`.  Any
-`ArrayIndexOutOfBoundsException` thrown by ASM while parsing malformed attribute data
-escaped entirely and terminated the packer.
+The `try/catch` in `processClasses` only caught `PassException` (silently) and
+`ArrayIndexOutOfBoundsException` separately.  Any other `RuntimeException` thrown by
+ASM while parsing malformed attribute data escaped entirely and terminated the packer.
+In addition, the `PassException` path logged nothing, giving no indication of why a
+class was passed through.
 
-**Fix:** added a second `catch (ArrayIndexOutOfBoundsException)` block that logs a
-warning and delegates to the shared `passClassThrough()` helper, so the file is passed
-through uncompressed instead of crashing the packer.
+**Fix:** replaced the two separate catch blocks with a single `catch (RuntimeException)`
+block that logs a diagnostic warning message before delegating to the shared
+`passClassThrough()` helper.  `PassException` (indicating an unrecognised attribute)
+produces a distinct message from all other exceptions (indicating a structurally invalid
+class file).
 
 ```java
-} catch (PassException e) {
-    passClassThrough(segmentUnit, classReader, e);
-} catch (ArrayIndexOutOfBoundsException e) {
-    PackingUtils.log("Warning: Passing class file through uncompressed due to malformed content: "
-            + classReader.getFileName());
+} catch (RuntimeException e) {
+    if (e instanceof PassException) {
+        PackingUtils.log("WARNING: Passing class file uncompressed due to unrecognized attribute: "
+                + classReader.getFileName());
+    } else {
+        PackingUtils.log("WARNING: Passing class file uncompressed due to unknown class format: "
+                + classReader.getFileName());
+    }
     passClassThrough(segmentUnit, classReader, e);
 }
 ```
@@ -169,7 +174,7 @@ exception types.
 
 ## Why BcBands state is not corrupted on pass-through
 
-A potential concern when a `PassException` or `ArrayIndexOutOfBoundsException` fires
+A potential concern when a `PassException` or other `RuntimeException` fires
 mid-visit is whether partially written bytecode bands (`BcBands`) could be left in an
 inconsistent state.
 
