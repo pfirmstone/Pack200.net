@@ -346,6 +346,14 @@ public abstract class ByteCodeForm {
         byteCodeArray[239] = new DoubleForm(239, "dldc2_w", new int[] { 20, -1,
                 -1 });
 
+        // Pack200 extension pseudo-opcodes for JSR-335 (Java 8+) interface method calls.
+        // invokespecial and invokestatic can target interface methods; they encode as
+        // 3-byte instructions referencing a CONSTANT_InterfaceMethodref (cp_Imethod).
+        byteCodeArray[242] = new InterfaceMethodRefForm(242,
+                "invokespecial_interface", new int[] { 183, -1, -1 });
+        byteCodeArray[243] = new InterfaceMethodRefForm(243,
+                "invokestatic_interface", new int[] { 184, -1, -1 });
+
         // Reserved bytecodes
         byteCodeArray[254] = new NoArgumentForm(254, "impdep1");
         byteCodeArray[255] = new NoArgumentForm(255, "impdep2");

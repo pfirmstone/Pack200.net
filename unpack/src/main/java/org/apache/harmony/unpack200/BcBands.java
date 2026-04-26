@@ -293,6 +293,10 @@ class BcBands extends BandSet {
 			case 241: // qldc_w
 			    bcLoadableValueRefCount++;
 			    break;
+                        case 242: // invokespecial_interface
+                        case 243: // invokestatic_interface
+                            bcIMethodRefCount++;
+                            break;
                         case 253: // ref_escape
                             bcEscRefCount++;
                             break;

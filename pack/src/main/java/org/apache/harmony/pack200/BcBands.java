@@ -455,10 +455,18 @@ class BcBands extends BandSet {
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean isInterface) {
         byteCodeOffset += 3;
 	if (isInterface){
-	    byteCodeOffset += 2;
 	    CPMethodOrField cpIMethod = cpBands.getCPIMethod(owner, name, desc);
 	    bcIMethodRef.add(cpIMethod);
-	    bcCodes.add(INVOKEINTERFACE);
+	    if (opcode == 183) { // invokespecial on an interface (JSR-335, Java 8+)
+		// 3-byte instruction: opcode already accounted for above
+		bcCodes.add(242); // invokespecial_interface
+	    } else if (opcode == 184) { // invokestatic on an interface (JSR-335, Java 8+)
+		// 3-byte instruction: opcode already accounted for above
+		bcCodes.add(243); // invokestatic_interface
+	    } else { // invokeinterface (185) or invokevirtual (182) on interface
+		byteCodeOffset += 2; // invokeinterface is 5 bytes total
+		bcCodes.add(INVOKEINTERFACE);
+	    }
 	} else {
 	    switch (opcode) {
 	    case 182: // invokevirtual
