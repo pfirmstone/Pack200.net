@@ -1,65 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2001, 2019, Oracle and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Oracle designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Oracle in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
+ * or visit www.oracle.com if you need additional information or have any
+ * questions.
+-->
+<project name="Pack200-jtreg-tests" default="test" basedir=".">
 
-<project name="test" basedir=".." default="build">
-    <!-- jtreg environment setup -->
+    <!-- jtreg home: prefer JT_HOME env var, fall back to jtreg.home property -->
     <property environment="env"/>
-    <!-- location of jtreg tests -->
-    <property name="jtreg.dir" location="test/jdk" />
-    <!-- location of Pack200 jar file -->
-    <property name="pack.home" location="."/>
-    <property name="version" value="-0.0.1-SNAPSHOT"/>
-    <property name="jtreg.home" location="${env.JT_HOME}" />
-    <!-- probably should rename the environment variable, to enable using the correct -->
-    <!-- jdk version for the jtreg tests -->
-    <property name="jdk.home" location="${env.JAVA_HOME}"/>
-    <property name="api.jar" value="${pack.home}/api/target/Pack200-API${version}.jar"/>
-    <property name="pack.jar" value="${pack.home}/pack/target/Pack200-packer${version}.jar"/>
-    <property name="unpack.jar" value="${pack.home}/unpack/target/Pack200-Unpacker${version}.jar"/>
-    <property name="asm.jar" value="${pack.home}/pack/target/Pack200-packer${version}-1/Pack200-packer${version}/deps/asm-7.3.1.jar"/>
-    <property name="pack.main.class" value="org.apache.harmony.pack200.Main"/>
-    <property name="unpack.main.class" value="org.apache.harmony.unpack200.Main"/>
-    <target name="test" depends="" description="Run jtreg tests">
-        <taskdef name="jtreg" classname="com.sun.javatest.regtest.Main$$Ant"
-                classpath="${jtreg.home}/jtreg.jar" />
-        
-        <jtreg  dir="${jtreg.dir}" verbose="all" failonerror="false"
-                errorproperty="jtreg.fail" failureproperty="jtreg.fail"
-                reportdir="${jtreg.dir}/JTreport" workdir="${jtreg.dir}/JTwork"
-                jdk="${jdk.home}">
-            <!--<arg value="-Dpolicy.provider=net.jini.security.policy.DynamicPolicyProvider"/>-->
-            <arg value="-cpa:${api.jar}${path.separator}${pack.jar}${path.separator}${asm.jar}${path.separator}${unpack.jar}"/>
-            <arg value="-timeout:16"/>
-            <arg value="-Dpack.home=${pack.home}"/>
-            <arg value="-Dpack.version=${version}"/>
-            <arg value="-Djtreg.dir=${jtreg.dir}"/>
-            <arg value="-Dscratch.dir=${jtreg.dir}/JTwork/scratch"/>
-            <arg value="-Dapi.jar=${api.jar}"/>
-            <arg value="-Dpack.jar=${pack.jar}"/>
-            <arg value="-Dunpack.jar=${unpack.jar}"/>
-            <arg value="-Dasm.jar=${asm.jar}"/>
-            <arg value="-Dpack.main.class=${pack.main.class}"/>
-            <arg value="-Dunpack.main.class=${unpack.main.class}"/>
-            <arg value="-ignore:quiet"/>
-            <arg value="-xml:verify"/>           
-            <!-- This argument only runs the tests that failed on the last test run -->
-            <!--<arg value="-status:fail"/>-->
-            <arg value="-Djava.security.debug=access,failure"/>
-            <!-- -DtestLevel Controls the amount of information printed.
-             *  0 - Just print final results and failures.
-             *  5 - Include stack trace for unexpected exceptions (default).
-             * 10 - Print test number and class for each new top level test class
-             * 15 - Print test number and class for every test.
-             * 20 - Print full test entry and pass/fail for every test.
-             * 25 - Include passing results.
-             * 30 - Include additional test debugging output, including time. -->
-            <arg value="-DtestLevel=30"/>
-            <!--<arg value="-J-Djavatest.maxOutputSize=300000"/>-->
-            <!--<arg value="-Bug:8000650"/>-->
-        </jtreg>
-        <fail if="jtreg.fail"/>
+    <condition property="jtreg.home" value="${env.JT_HOME}">
+        <isset property="env.JT_HOME"/>
+    </condition>
+    <property name="jtreg.home" value="/usr/local/jtreg"/>
+
+    <!-- Java home for running tests -->
+    <condition property="jdk.home" value="${env.JAVA_HOME}">
+        <isset property="env.JAVA_HOME"/>
+    </condition>
+    <property name="jdk.home" value="${java.home}"/>
+
+    <!-- Pack200 jar location -->
+    <property name="api.home" location="${basedir}/api/target"/>
+    <property name="pack.home" location="${basedir}/pack/target"/>
+    <property name="unpack.home" location="${basedir}/unpack/target"/>
+    <property name="version"   value="-1.27.0"/>
+    <property name="api.jar"  location="${api.home}/Pack200-API${version}.jar"/>
+    <property name="pack.jar"  location="${pack.home}/Pack200-Packer${version}.jar"/>
+    <property name="unpack.jar"  location="${unpack.home}/Pack200-Unpacker${version}.jar"/>
+    <property name="asm.jar" location="${basedir}/dist/target/Pack200-dist${version}/lib/asm-${asm.version}.jar"/>
+
+    <!-- jtreg output directories -->
+    <property name="jtreg.report.dir" location="${basedir}/target/jtreg/report"/>
+    <property name="jtreg.work.dir"   location="${basedir}/target/jtreg/work"/>
+
+    <!-- Test suite directory -->
+    <property name="test.dir" location="${basedir}/test/jdk"/>
+
+    <!--
+      Problem list: tests listed here are excluded from the jtreg run.
+      Override by setting the JTREG_PROBLEM_LIST environment variable or the
+      problem.list Ant property to point at a different file.
+      Default: test/jdk/ProblemList.txt
+    -->
+    <condition property="problem.list" value="${env.JTREG_PROBLEM_LIST}">
+        <isset property="env.JTREG_PROBLEM_LIST"/>
+    </condition>
+    <property name="problem.list" location="${test.dir}/ProblemList.txt"/>
+
+    <target name="test" description="Run jtreg tests">
+        <mkdir dir="${jtreg.report.dir}"/>
+        <mkdir dir="${jtreg.work.dir}"/>
+        <java classname="com.sun.javatest.regtest.Main"
+              fork="true"
+              failonerror="true">
+            <classpath>
+                <fileset dir="${jtreg.home}/lib" includes="*.jar" erroronmissingdir="false"/>
+            </classpath>
+            <arg value="-verbose:summary"/>
+            <arg value="-r:${jtreg.report.dir}"/>
+            <arg value="-workDir:${jtreg.work.dir}"/>
+            <arg value="-jdk:${jdk.home}"/>
+            <arg value="-exclude:${problem.list}"/>
+            <arg value="-cpa:${api.jar}${path.separator}${pack.jar}${path.separator}${unpack.jar}${path.separator}${asm.jar}"/>
+            <arg value="-vmoption:-Dapi.home=${api.home}"/>
+            <arg value="-vmoption:-Dpack.home=${pack.home}"/>
+            <arg value="-vmoption:-Dunpack.home=${unpack.home}"/>
+            <arg value="-vmoption:-Dpack.version=${version}"/>
+            <arg value="${test.dir}"/>
+        </java>
     </target>
-    <target name="clean" description="Clean up jtreg tests">
-        <delete dir="${jtreg.dir}/JTreport"/>
-        <delete dir="${jtreg.dir}/JTwork"/>
+
+    <target name="clean" description="Clean jtreg output directories">
+        <delete dir="${jtreg.report.dir}"/>
+        <delete dir="${jtreg.work.dir}"/>
     </target>
+
 </project>

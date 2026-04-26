@@ -22,12 +22,12 @@
     <parent>
         <groupId>net.pack200</groupId>
         <artifactId>Pack200</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.27.0</version>
         <relativePath>../pom.xml</relativePath>     
     </parent>
 
     <groupId>net.pack200.pack</groupId>
-    <artifactId>Pack200-packer</artifactId>
+    <artifactId>Pack200-Packer</artifactId>
     <packaging>jar</packaging>
 
     <name>Module :: Pack200 Packer</name>

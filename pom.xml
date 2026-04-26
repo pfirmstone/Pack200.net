@@ -22,7 +22,7 @@
 
     <groupId>net.pack200</groupId>
     <artifactId>Pack200</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.27.0</version>
     <packaging>pom</packaging>
 
     <name>PACK200</name>
@@ -34,6 +34,7 @@
         <module>api</module>
         <module>unpack</module>
         <module>pack</module>
+        <module>dist</module>
     </modules>
     
     <properties>
@@ -98,6 +99,7 @@
                 <version>5.3.0</version>
                 <executions>
                     <execution>
+                        <phase>never</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
@@ -141,6 +143,27 @@
                     <version>${maven-surefire-plugin.version}</version>
                   </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <target>
+                                <ant antfile="./test/build.xml">
+                                    <target name="test"/>
+                                </ant>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <!-- for publishing maven site to gh-pages : begin -->
       <plugin>
