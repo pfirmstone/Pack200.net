@@ -310,7 +310,7 @@ class Segment extends ClassVisitor {
     /**
      * Record classes (finalized in Java 16, preview in Java 14/15).
      * Encodes name, descriptor, and optional generic signature for each
-     * component as Pack200 bands (bit 25 of class_flags).  Components that
+     * component as Pack200 bands (bit 26 of class_flags).  Components that
      * carry annotations or other unsupported sub-attributes are not encodable
      * with Option A; in that case the visitor passes the whole class through
      * uncompressed via PassException.
