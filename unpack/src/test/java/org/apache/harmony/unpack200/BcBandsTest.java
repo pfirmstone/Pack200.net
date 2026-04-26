@@ -572,6 +572,24 @@ public class BcBandsTest extends AbstractBandsTestCase {
     }
 
     /**
+     * Test that pseudo-opcodes 242 (invokespecial_interface) and 243
+     * (invokestatic_interface) each require an entry in the bc_imethodref band.
+     * These pseudo-opcodes represent invokespecial/invokestatic on interface
+     * methods (JSR-335, Java 8+).
+     *
+     * @throws Pack200Exception
+     * @throws IOException
+     */
+    public void testBcInterfaceMethodInstructionsBand() throws IOException, Pack200Exception {
+        byte[] bytes = new byte[] { (byte) 242, (byte) 243, (byte) 255, 8, 8 }; // bc_imethodref band
+        InputStream in = new ByteArrayInputStream(bytes);
+        bcBands.unpack(in);
+        assertEquals(2, bcBands.getMethodByteCodePacked()[0][0].length);
+        int[] bc_imethodref = bcBands.getBcIMethodRef();
+        assertEquals(2, bc_imethodref.length);
+    }
+
+    /**
      * Test with codes that should require entries in the bc_thisfieldref band
      *
      * @throws Pack200Exception
