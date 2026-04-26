@@ -749,8 +749,8 @@ class Segment extends ClassVisitor {
 	    @Override
 	    public AnnotationVisitor visitAnnotation(String arg0,
 		    String arg1) {
-		throw new RuntimeException("Not yet supported");
-//                    return null;
+		passCurrentClass();
+		return null;
 	    }
 	    
 	    @Override
@@ -805,7 +805,8 @@ class Segment extends ClassVisitor {
 	@Override
         public AnnotationVisitor visitAnnotation(String arg0,
                 String arg1) {
-            throw new RuntimeException("Not yet supported");
+            passCurrentClass();
+            return null;
         }
 
 	@Override
