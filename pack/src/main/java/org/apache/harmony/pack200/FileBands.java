@@ -118,12 +118,24 @@ class FileBands extends BandSet {
     public void finaliseBands() {
         file_name = new int[fileName.length];
         for (int i = 0; i < file_name.length; i++) {
-            if (fileName[i].equals(cpBands.getCPUtf8(""))) {
-                PackingFile packingFile = (PackingFile) fileList.get(i);
-                String name = packingFile.getName();
-                if (options.isPassFile(name)) {
-                    fileName[i] = cpBands.getCPUtf8(name);
+            PackingFile packingFile = (PackingFile) fileList.get(i);
+            String name = packingFile.getName();
+            if (options.isPassFile(name)) {
+                // This file was passed through during class processing.  The
+                // file contents were restored by passClassThrough(), but
+                // file_bits and file_size were captured in the constructor
+                // before that restoration; refresh them now so the packed
+                // output contains the real bytes.  Also clear the isClass bit
+                // so the unpacker treats this entry as raw file data rather
+                // than trying to reconstruct it from (empty) class bands.
+                if ((file_options[i] & (1 << 1)) != 0) {
                     file_options[i] &= (1 << 1) ^ 0xFFFFFFFF;
+                    byte[] contents = packingFile.getContents();
+                    file_bits[i] = contents;
+                    file_size[i] = contents.length;
+                }
+                if (fileName[i].equals(cpBands.getCPUtf8(""))) {
+                    fileName[i] = cpBands.getCPUtf8(name);
                 }
             }
             file_name[i] = fileName[i].getIndex();
