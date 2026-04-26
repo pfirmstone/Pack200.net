@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.zip.CRC32;
@@ -552,27 +551,24 @@ public class Segment {
                 entry.setMethod(ZipEntry.DEFLATED);
             } else {
                 entry.setMethod(ZipEntry.STORED);
-                CRC32 crc = new CRC32();
-                if(fileIsClass[i]) {
-                    crc.update(classFilesContents[classNum]);
-                    entry.setSize(classFilesContents[classNum].length);
-                } else {
-                    crc.update(fileBits[i]);
-                    entry.setSize(fileSize[i]);
-                }
-                entry.setCrc(crc.getValue());
             }
-            // On Windows at least, need to correct for timezone
-            entry.setTime(modtime - TimeZone.getDefault().getRawOffset());
+            CRC32 crc = new CRC32();
+            if (fileIsClass[i]) {
+                crc.update(classFilesContents[classNum]);
+                entry.setSize(classFilesContents[classNum].length);
+            } else {
+                crc.update(fileBits[i]);
+                entry.setSize(fileSize[i]);
+            }
+            entry.setCrc(crc.getValue());
+            entry.setTime(modtime);
             out.putNextEntry(entry);
 
             // write to output stream
             if (fileIsClass[i]) {
-                entry.setSize(classFilesContents[classNum].length);
                 out.write(classFilesContents[classNum]);
                 classNum++;
             } else {
-                entry.setSize(fileSize[i]);
                 out.write(fileBits[i]);
             }
         }
