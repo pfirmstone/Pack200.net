@@ -209,7 +209,7 @@ class Segment extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name, String signature,
             String superName, String[] interfaces) {
-        /**
+        /*
          * Module-info.class files (Java 9+) contain only module metadata with no actual
          * class definitions. Pack200 has no native encoding for module attributes
          * (Module, ModulePackages, ModuleMainClass, etc.), so pass them through as-is.

@@ -36,6 +36,9 @@ import org.objectweb.asm.ClassReader;
  */
 class FileBands extends BandSet {
 
+    /** Bit in file_options that marks a file as a class to be rebuilt from class bands. */
+    private static final int IS_CLASS_BIT = 1 << 1;
+
     private final CPUTF8[] fileName;
     private int[] file_name;
     private final int[] file_modtime;
@@ -76,7 +79,7 @@ class FileBands extends BandSet {
             PackingFile packingFile = (PackingFile) fileList.get(i);
             String name = packingFile.getName();
             if (name.endsWith(".class") && !options.isPassFile(name)) {
-                file_options[i] |= (1 << 1);
+                file_options[i] |= IS_CLASS_BIT;
                 if (classNames.contains(name.substring(0, name.length() - 6))) {
                     fileName[i] = emptyString;
                 } else {
@@ -128,8 +131,8 @@ class FileBands extends BandSet {
                 // output contains the real bytes.  Also clear the isClass bit
                 // so the unpacker treats this entry as raw file data rather
                 // than trying to reconstruct it from (empty) class bands.
-                if ((file_options[i] & (1 << 1)) != 0) {
-                    file_options[i] &= (1 << 1) ^ 0xFFFFFFFF;
+                if ((file_options[i] & IS_CLASS_BIT) != 0) {
+                    file_options[i] &= IS_CLASS_BIT ^ 0xFFFFFFFF;
                     byte[] contents = packingFile.getContents();
                     file_bits[i] = contents;
                     file_size[i] = contents.length;
