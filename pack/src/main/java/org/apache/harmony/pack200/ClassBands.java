@@ -60,7 +60,7 @@ class ClassBands extends BandSet {
     private final IntList classFileVersionMinor = new IntList();
     private final IntList classFileVersionMajor = new IntList();
 
-    // Record attribute (Java 16) – flag bit 25 in class_flags
+    // Record attribute (Java 16) – flag bit 26 in class_flags
     private final IntList classRecordCount = new IntList(); // components per record class
     private final List<CPUTF8> classRecordNameRU = new ArrayList<CPUTF8>();
     private final List classRecordDescRS = new ArrayList(); // CPSignature – component field descriptor
@@ -1168,7 +1168,7 @@ class ClassBands extends BandSet {
 
     /**
      * Record a single record component for the current class (Java 16+).
-     * The first component sets the Record attribute flag bit (25) in class_flags.
+     * The first component sets the Record attribute flag bit (26) in class_flags.
      * Components with an optional generic signature supply it as the third argument;
      * pass {@code null} when no Signature sub-attribute should be emitted.
      * If any component carries annotations or other unsupported sub-attributes the
@@ -1177,7 +1177,7 @@ class ClassBands extends BandSet {
      */
     public void addRecordComponent(String name, String descriptor, String signature) {
         if (tempRecordComponentCount == 0) {
-            class_flags[index] |= (1 << 25);
+            class_flags[index] |= (1 << 26);
         }
         classRecordNameRU.add(cpBands.getCPUtf8(name));
         classRecordDescRS.add(cpBands.getCPSignature(descriptor));

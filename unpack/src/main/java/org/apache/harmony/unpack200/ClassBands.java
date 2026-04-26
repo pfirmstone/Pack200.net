@@ -654,7 +654,7 @@ class ClassBands extends BandSet {
         int defaultVersionMajor = header.getDefaultClassMajorVersion();
         int defaultVersionMinor = header.getDefaultClassMinorVersion();
 
-        // Parse Record attribute bands (Java 16, flag bit 25)
+        // Parse Record attribute bands (Java 16, flag bit 26)
         AttributeLayout recordLayout = attrMap.getAttributeLayout(
                 AttributeLayout.ATTRIBUTE_RECORD,
                 AttributeLayout.CONTEXT_CLASS);

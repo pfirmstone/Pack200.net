@@ -86,7 +86,7 @@ class AttributeDefinitionBands extends BandSet {
         if (codeLayouts.size() > 15) {
             segmentHeader.setHave_code_flags_hi(true);
         }
-        int[] availableClassIndices = new int[] { 26, 27, 28, 29, 30, 31 };
+        int[] availableClassIndices = new int[] { 25, 27, 28, 29, 30, 31 };
         if (classLayouts.size() > 7) {
             availableClassIndices = addHighIndices(availableClassIndices);
         }
