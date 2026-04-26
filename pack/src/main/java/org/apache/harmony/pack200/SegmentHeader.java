@@ -339,8 +339,8 @@ class SegmentHeader extends BandSet {
      */
     private static class Counter {
 
-        private final int[] objs = new int[8];
-        private final int[] counts = new int[8];
+        private int[] objs = new int[8];
+        private int[] counts = new int[8];
         private int length;
 
         public void add(int obj) {
@@ -352,13 +352,17 @@ class SegmentHeader extends BandSet {
                 }
             }
             if (!found) {
+                if (length >= objs.length) {
+                    int[] newObjs = new int[objs.length + 8];
+                    int[] newCounts = new int[counts.length + 8];
+                    System.arraycopy(objs, 0, newObjs, 0, length);
+                    System.arraycopy(counts, 0, newCounts, 0, length);
+                    objs = newObjs;
+                    counts = newCounts;
+                }
                 objs[length] = obj;
                 counts[length] = 1;
                 length++;
-                if (length > objs.length - 1) {
-                    Object[] newArray = new Object[objs.length + 8];
-                    System.arraycopy(objs, 0, newArray, 0, length);
-                }
             }
         }
 

@@ -19,7 +19,6 @@ package org.apache.harmony.unpack200;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.harmony.unpack200.codec.Codec;
@@ -543,16 +542,18 @@ class ClassBands extends BandSet {
                 callCount += layout.numBackwardsCallables();
             }
         }
-        int layoutsUsed = 0;
+        long layoutsUsed = 0;
         for (int i = 0; i < flags.length; i++) {
             for (int j = 0; j < flags[i].length; j++) {
                 layoutsUsed |= flags[i][j];
             }
         }
-        for (int i = 0; i < 26; i++) {
-            if ((layoutsUsed & 1 << i) != 0) {
+        for (int i = 0; i < 32; i++) {
+            if ((layoutsUsed & (1L << i)) != 0) {
                 AttributeLayout layout = attrMap.getAttributeLayout(i, context);
-                callCount += layout.numBackwardsCallables();
+                if (layout != null) {
+                    callCount += layout.numBackwardsCallables();
+                }
             }
         }
         return callCount;
@@ -658,7 +659,8 @@ class ClassBands extends BandSet {
         AttributeLayout recordLayout = attrMap.getAttributeLayout(
                 AttributeLayout.ATTRIBUTE_RECORD,
                 AttributeLayout.CONTEXT_CLASS);
-        int recordCount = SegmentUtils.countMatches(classFlags, recordLayout);
+        int recordCount = (recordLayout != null)
+                ? SegmentUtils.countMatches(classFlags, recordLayout) : 0;
         int[] classRecordN = decodeBandInt("class_Record_N", in,
                 Codec.UNSIGNED5, recordCount);
         int totalRecordComponents = 0;
@@ -1376,18 +1378,17 @@ class ClassBands extends BandSet {
         int riaCount = SegmentUtils.countMatches(fieldFlags, riaLayout);
         int[] RxACount = new int[] { rvaCount, riaCount };
         int[] backwardsCalls = new int[] { 0, 0 };
-	System.out.println("fieldAttrCalls: " + Arrays.toString(fieldAttrCalls));
-	if (rvaCount > 0) {
-	    backwardsCalls[0] = fieldAttrCalls[0];
-	    backwardsCallsUsed++;
-	    if (riaCount > 0) {
-		backwardsCalls[1] = fieldAttrCalls[1];
-		backwardsCallsUsed++;
-	    }
-	} else if (riaCount > 0) {
-	    backwardsCalls[1] = fieldAttrCalls[0];
-	    backwardsCallsUsed++;
-	}
+        if (rvaCount > 0) {
+            backwardsCalls[0] = fieldAttrCalls[0];
+            backwardsCallsUsed++;
+            if (riaCount > 0) {
+                backwardsCalls[1] = fieldAttrCalls[1];
+                backwardsCallsUsed++;
+            }
+        } else if (riaCount > 0) {
+            backwardsCalls[1] = fieldAttrCalls[0];
+            backwardsCallsUsed++;
+        }
         MetadataBandGroup[] mb = parseMetadata(in, RxA, RxACount,
                 backwardsCalls, "field");
         List rvaAttributes = mb[0].getAttributes();
@@ -1543,17 +1544,16 @@ class ClassBands extends BandSet {
                     .countMatches(methodFlags, rxaLayouts[i]);
         }
         int[] backwardsCalls = new int[5];
-	System.out.println("methodAttrCalls: " + Arrays.toString(methodAttrCalls));
-	int methodAttrIndex = 0;
-	for (int i = 0; i < backwardsCalls.length; i++) {
-	    if (rxaCounts[i] > 0) {
-		backwardsCallsUsed++;
-		backwardsCalls[i] = methodAttrCalls[methodAttrIndex];
-		methodAttrIndex++;
-	    } else {
-		backwardsCalls[i] = 0;
-	    }
-	}
+        int methodAttrIndex = 0;
+        for (int i = 0; i < backwardsCalls.length; i++) {
+            if (rxaCounts[i] > 0) {
+                backwardsCallsUsed++;
+                backwardsCalls[i] = methodAttrCalls[methodAttrIndex];
+                methodAttrIndex++;
+            } else {
+                backwardsCalls[i] = 0;
+            }
+        }
         MetadataBandGroup[] mbgs = parseMetadata(in, RxA, rxaCounts,
                 backwardsCalls, "method");
         List[] attributeLists = new List[RxA.length];
