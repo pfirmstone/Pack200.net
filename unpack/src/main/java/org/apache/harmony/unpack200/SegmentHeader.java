@@ -162,7 +162,7 @@ class SegmentHeader {
      *             if the major version is not 150
      */
     private void setArchiveMajorVersion(int version) throws Pack200Exception {
-        if ((archiveMinor == 7 && version == 150 )||( archiveMinor == 1 &&( version == 160 || version ==170))){
+        if ((archiveMinor == 7 && version == 150 )||( archiveMinor == 1 &&( version == 160 || version ==170 || version == 180))){
 	    archiveMajor = version;
 	} else {
             throw new Pack200Exception("Invalid segment major version: "
