@@ -86,6 +86,11 @@ class ClassBands extends BandSet {
     private final IntList codeMaxStack = new IntList();
     private final IntList codeMaxLocals = new IntList();
     private final IntList codeHandlerCount = new IntList();
+    // Tracks whether addCode() was called for the current method without a
+    // matching addMaxStack() call.  Used by removeCurrentClass() to clean up
+    // any partial code-body state left behind when a PassException fires
+    // between visitCode() and visitMaxs() (e.g. due to type annotations).
+    private boolean codeAddedWithoutMaxStack = false;
     private final List codeHandlerStartP = new ArrayList();
     private final List codeHandlerEndPO = new ArrayList();
     private final List codeHandlerCatchPO = new ArrayList();
@@ -308,9 +313,17 @@ class ClassBands extends BandSet {
         codeHeaders = new int[codeHandlerCount.size()];
         int removed = 0;
         for (int i = 0; i < codeHeaders.length; i++) {
-            int numHandlers = codeHandlerCount.get(i - removed);
-            int maxLocals = codeMaxLocals.get(i - removed);
-            int maxStack = codeMaxStack.get(i - removed);
+            int adjustedIdx = i - removed;
+            if (adjustedIdx < 0 || adjustedIdx >= codeMaxLocals.size()
+                    || adjustedIdx >= codeMaxStack.size()) {
+                // Defensive guard: the three code-size lists should always be in
+                // sync.  If they diverge (e.g. due to a partially-removed class)
+                // leave the remaining headers as 0 and stop computing.
+                break;
+            }
+            int numHandlers = codeHandlerCount.get(adjustedIdx);
+            int maxLocals = codeMaxLocals.get(adjustedIdx);
+            int maxStack = codeMaxStack.get(adjustedIdx);
             if (numHandlers == 0) {
                 int header = maxLocals * 12 + maxStack + 1;
                 if (header < 145 && maxStack < 12) {
@@ -330,9 +343,9 @@ class ClassBands extends BandSet {
             if (codeHeaders[i] != 0) { // Remove the redundant values from
                                         // codeHandlerCount, codeMaxLocals and
                                         // codeMaxStack
-                codeHandlerCount.remove(i - removed);
-                codeMaxLocals.remove(i - removed);
-                codeMaxStack.remove(i - removed);
+                codeHandlerCount.remove(adjustedIdx);
+                codeMaxLocals.remove(adjustedIdx);
+                codeMaxStack.remove(adjustedIdx);
                 removed++;
             } else if (!segment.getSegmentHeader().have_all_code_flags()) {
                 codeFlags.add(Long.valueOf(0));
@@ -1246,6 +1259,7 @@ class ClassBands extends BandSet {
     }
 
     public void addMaxStack(int maxStack, int maxLocals) {
+        codeAddedWithoutMaxStack = false;
         Long latestFlag = (Long) tempMethodFlags
                 .remove(tempMethodFlags.size() - 1);
         Long newFlag = Long.valueOf(latestFlag.intValue() | (1 << 17));
@@ -1259,6 +1273,7 @@ class ClassBands extends BandSet {
     }
 
     public void addCode() {
+        codeAddedWithoutMaxStack = true;
         codeHandlerCount.add(0);
         if(!stripDebug) {
             codeFlags.add(Long.valueOf((1 << 2)));
@@ -1657,6 +1672,55 @@ class ClassBands extends BandSet {
             if ((flags & (1 << 25)) != 0) {
                 method_AD_bands.removeLatest();
             }
+        }
+        // If addCode() was called for the last method but addMaxStack() was not
+        // (e.g. a PassException fired from visitInsnAnnotation before visitMaxs),
+        // the corresponding codeHandlerCount / codeFlags / debug entries are left
+        // behind.  Remove them now so the three code-size lists stay in sync.
+        if (codeAddedWithoutMaxStack) {
+            int handlers = codeHandlerCount.remove(codeHandlerCount.size() - 1);
+            for (int i = 0; i < handlers; i++) {
+                int idx = codeHandlerStartP.size() - 1;
+                codeHandlerStartP.remove(idx);
+                codeHandlerEndPO.remove(idx);
+                codeHandlerCatchPO.remove(idx);
+                codeHandlerClass.remove(idx);
+            }
+            if (!stripDebug) {
+                long cdeFlags = ((Long) codeFlags.remove(codeFlags.size() - 1)).longValue();
+                int numLocalVariables = codeLocalVariableTableN.remove(
+                        codeLocalVariableTableN.size() - 1);
+                for (int i = 0; i < numLocalVariables; i++) {
+                    int location = codeLocalVariableTableBciP.size() - 1;
+                    codeLocalVariableTableBciP.remove(location);
+                    codeLocalVariableTableSpanO.remove(location);
+                    codeLocalVariableTableNameRU.remove(location);
+                    codeLocalVariableTableTypeRS.remove(location);
+                    codeLocalVariableTableSlot.remove(location);
+                }
+                if ((cdeFlags & (1 << 3)) != 0) {
+                    int numLocalVariablesInTypeTable = codeLocalVariableTypeTableN
+                            .remove(codeLocalVariableTypeTableN.size() - 1);
+                    for (int i = 0; i < numLocalVariablesInTypeTable; i++) {
+                        int location = codeLocalVariableTypeTableBciP.size() - 1;
+                        codeLocalVariableTypeTableBciP.remove(location);
+                        codeLocalVariableTypeTableSpanO.remove(location);
+                        codeLocalVariableTypeTableNameRU.remove(location);
+                        codeLocalVariableTypeTableTypeRS.remove(location);
+                        codeLocalVariableTypeTableSlot.remove(location);
+                    }
+                }
+                if ((cdeFlags & (1 << 1)) != 0) {
+                    int numLineNumbers = codeLineNumberTableN
+                            .remove(codeLineNumberTableN.size() - 1);
+                    for (int i = 0; i < numLineNumbers; i++) {
+                        int location = codeLineNumberTableBciP.size() - 1;
+                        codeLineNumberTableBciP.remove(location);
+                        codeLineNumberTableLine.remove(location);
+                    }
+                }
+            }
+            codeAddedWithoutMaxStack = false;
         }
         class_this[index] = null;
         class_super[index] = null;
