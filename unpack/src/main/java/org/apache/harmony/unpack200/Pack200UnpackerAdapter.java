@@ -37,10 +37,12 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = Unpacker.class)
 public class Pack200UnpackerAdapter extends Pack200Adapter implements Unpacker {
 
+    private static final String VERSION = "170.1";
+
     @Override
     public String toString() {
         return "Pack200, Vendor: " + System.getProperty("java.vendor")
-                + ", Version: 170.1";
+                + ", Version: " + VERSION;
     }
 
 	/*
