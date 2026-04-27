@@ -484,7 +484,12 @@ class CpBands extends BandSet {
                 cpStringCount);
         cpString = new String[cpStringCount];
         for (int i = 0; i < cpStringCount; i++) {
-            cpString[i] = cpUTF8[cpStringInts[i]];
+            int utf8Index = cpStringInts[i];
+            if (utf8Index < 0 || utf8Index >= cpUTF8.length) {
+                throw new Pack200Exception("Invalid cp_String index: " + utf8Index
+                        + " (cp_UTF8 length: " + cpUTF8.length + ")");
+            }
+            cpString[i] = cpUTF8[utf8Index];
         }
     }
 
