@@ -36,6 +36,22 @@ public class Pack200PackerAdapter extends Pack200Adapter implements Packer {
 
     private final PackingOptions options = new PackingOptions();
 
+    public Pack200PackerAdapter() {
+        // Populate default properties as required by the Pack200 specification
+        properties().put(CLASS_ATTRIBUTE_PFX + "CompilationID", "RUH");
+        properties().put(CLASS_ATTRIBUTE_PFX + "SourceID", "RUH");
+        properties().put(CODE_ATTRIBUTE_PFX + "CharacterRangeTable", "NH[PHPOHIIH]");
+        properties().put(CODE_ATTRIBUTE_PFX + "CoverageTable", "NH[PHHII]");
+        properties().put(DEFLATE_HINT, KEEP);
+        properties().put(EFFORT, "5");
+        properties().put(KEEP_FILE_ORDER, TRUE);
+        properties().put(MODIFICATION_TIME, KEEP);
+        properties().put(SEGMENT_LIMIT, "-1");
+        properties().put(UNKNOWN_ATTRIBUTE, PASS);
+        properties().put("au.net.zeus.util.jar.pack.disable.native", FALSE);
+        properties().put("au.net.zeus.util.jar.pack.verbose", "0");
+    }
+
     @Override
     public void pack(JarFile file, OutputStream out) throws IOException {
         if (file == null || out == null)
